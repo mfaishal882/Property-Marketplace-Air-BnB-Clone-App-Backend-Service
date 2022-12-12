@@ -62,7 +62,7 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 		log.Print(res)
 		input.ProfileImageUrl = res
 	} else {
-		input.ProfileImageUrl = "https://project3bucker.s3.ap-southeast-1.amazonaws.com/dummy-profile-pic.png"
+		input.ProfileImageUrl = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
 	bytePass, errEncrypt := bcrypt.GenerateFromPassword([]byte(input.Password), 10)

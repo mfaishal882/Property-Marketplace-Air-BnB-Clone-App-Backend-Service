@@ -69,7 +69,11 @@ func initConfig() *AppConfig {
 		` \n - db password : `, defaultConfig.DB_PASSWORD,
 		` \n - db host : `, defaultConfig.DB_HOST,
 		` \n - db port : `, defaultConfig.DB_PORT,
-		` \n - jwt secret : `, defaultConfig.JWT_SECRET)
+		` \n - jwt secret : `, defaultConfig.JWT_SECRET,
+		` \n - AWS_REGION : `, os.Getenv("JWT_SECRET"),
+		` \n - AWS_BUCKET_NAME : `, os.Getenv("AWS_BUCKET_NAME"),
+		` \n - ACCESS_KEY_IAM : `, os.Getenv("ACCESS_KEY_IAM"),
+		` \n - SECRET_KEY_IAM : `, os.Getenv("SECRET_KEY_IAM"))
 
 	return &defaultConfig
 }

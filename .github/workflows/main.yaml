@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: mfaishal882/api-airbnb-alta-img:latest
+          tags: mfaishal882/api-alta-dashboard2-img:latest
       - 
         name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
@@ -36,10 +36,10 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-              docker stop apiAirBnbAlta
-              docker rm apiAirBnbAlta
-              docker rmi mfaishal882/api-airbnb-alta-img:latest
-              docker run --name apiAirBnbAlta --link mysqlContainer -d -p 8005:8005 -e SERVER_PORT=${{secrets.SERVER_PORT}} -e DB_USERNAME=${{secrets.DB_USERNAME}} -e DB_PASSWORD=${{secrets.DB_PASSWORD}} -e DB_HOST=${{secrets.DB_HOST}} -e DB_PORT=${{secrets.DB_PORT}} -e DB_NAME=${{secrets.DB_NAME}} -e JWT_SECRET=${{secrets.JWT_SECRET}} mfaishal882/api-airbnb-alta-img:latest
+              docker stop api-alta-dashboard2
+              docker rm api-alta-dashboard2
+              docker rmi mfaishal882/api-alta-dashboard2-img
+              docker run --name api-alta-dashboard2 --link mysqlContainer -d -p 8005:8005 -e SERVER_PORT=${{secrets.SERVER_PORT}} -e DB_USERNAME=${{secrets.DB_USERNAME}} -e DB_PASSWORD=${{secrets.DB_PASSWORD}} -e DB_HOST=${{secrets.DB_HOST}}  -e DB_PORT=${{secrets.DB_PORT}}  -e DB_NAME=${{secrets.DB_NAME}} -e JWT_SECRET=${{secrets.JWT_SECRET}} mfaishal882/api-alta-dashboard2-img:latest
 
 
 

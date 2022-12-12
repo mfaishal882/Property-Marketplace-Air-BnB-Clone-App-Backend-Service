@@ -21,9 +21,9 @@ func New(service user.ServiceInterface, e *echo.Echo) {
 
 	e.GET("/users", handler.GetAll, middlewares.JWTMiddleware())
 	e.GET("/users/:id", handler.GetById, middlewares.JWTMiddleware())
-	e.POST("/users", handler.Create, middlewares.JWTMiddleware(), middlewares.IsAdmin)
+	e.POST("/users", handler.Create)
 	e.PUT("/users/:id", handler.Update, middlewares.JWTMiddleware(), middlewares.UserOnlySameId)
-	e.DELETE("/users/:id", handler.Delete, middlewares.JWTMiddleware(), middlewares.IsAdmin)
+	e.DELETE("/users/:id", handler.Delete, middlewares.JWTMiddleware(), middlewares.UserOnlySameId)
 
 	//middlewares.IsAdmin = untuk membatasi akses endpoint hanya admin
 	//middlewares.UserOnlySameId = untuk membatasi akses user mengelola data diri sendiri saja

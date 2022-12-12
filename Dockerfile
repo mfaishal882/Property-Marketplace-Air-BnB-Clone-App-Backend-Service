@@ -12,6 +12,6 @@ RUN go mod tidy
 
 RUN go build -o api-airbnb-alta
 
-EXPOSE 8000
+EXPOSE 8005
 
 CMD [ "./api-airbnb-alta" ]

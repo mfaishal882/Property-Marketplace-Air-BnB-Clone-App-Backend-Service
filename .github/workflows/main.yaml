@@ -39,7 +39,7 @@ jobs:
               docker stop api-airbnb-alta
               docker rm api-airbnb-alta
               docker rmi mfaishal882/api-airbnb-alta-img
-              docker run --name api-airbnb-alta --link mysqlContainer -d -p 8000:8000 -e SERVER_PORT=${{secrets.SERVER_PORT}} -e DB_USERNAME=${{secrets.DB_USERNAME}} -e DB_PASSWORD=${{secrets.DB_PASSWORD}} -e DB_HOST=${{secrets.DB_HOST}}  -e DB_PORT=${{secrets.DB_PORT}}  -e DB_NAME=${{secrets.DB_NAME}} -e JWT_SECRET=${{secrets.JWT_SECRET}} -e AWS_REGION=${{secrets.AWS_REGION}} -e AWS_BUCKET_NAME=${{secrets.AWS_BUCKET_NAME}} -e ACCESS_KEY_IAM=${{secrets.ACCESS_KEY_IAM}} -e SECRET_KEY_IAM=${{secrets.SECRET_KEY_IAM}} mfaishal882/api-airbnb-alta-img:latest
+              docker run --name api-airbnb-alta --link mysqlContainer -d -p 8005:8005 -e SERVER_PORT=${{secrets.SERVER_PORT}} -e DB_USERNAME=${{secrets.DB_USERNAME}} -e DB_PASSWORD=${{secrets.DB_PASSWORD}} -e DB_HOST=${{secrets.DB_HOST}}  -e DB_PORT=${{secrets.DB_PORT}}  -e DB_NAME=${{secrets.DB_NAME}} -e JWT_SECRET=${{secrets.JWT_SECRET}} mfaishal882/api-airbnb-alta-img:latest
 
 
 

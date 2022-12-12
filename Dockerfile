@@ -10,8 +10,8 @@ COPY ./ /app
 
 RUN go mod tidy
 
-RUN go build -o apiAirbnbAlta
+RUN go build -o api-airbnb-alta
 
 EXPOSE 8000
 
-CMD [ "./apiAirbnbAlta" ]
+CMD [ "./api-airbnb-alta" ]

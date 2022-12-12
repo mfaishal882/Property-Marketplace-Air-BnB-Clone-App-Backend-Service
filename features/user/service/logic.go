@@ -39,14 +39,14 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 	}
 
 	// validasi email harus unik
-	_, errFindEmail := service.userRepository.FindUser(input.Email)
+	data, errFindEmail := service.userRepository.FindUser(input.Email)
 
-	// helper.LogDebug("\n\n\n find email res  ", res)
-	// helper.LogDebug("\n\n\n find email rowAffected  ", rowAffected)
+	helper.LogDebug("\n\n\n find email input  ", input.Email)
+	helper.LogDebug("\n\n\n find email data  ", data.Email)
 
-	// if rowAffected > 0 {
-	// 	return errors.New("Failed. Email " + input.Email + " already exist. Please pick another email.")
-	// }
+	if data.Email == input.Email {
+		return errors.New("Failed. Email " + input.Email + " already exist. Please pick another email.")
+	}
 
 	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
 		return helper.ServiceErrorMsg(errFindEmail)
@@ -125,6 +125,20 @@ func (service *userService) Update(input user.Core, id int) error {
 	if errFindId != nil {
 		log.Error(errFindId.Error())
 		return helper.ServiceErrorMsg(errFindId)
+	}
+
+	// validasi email harus unik pas update, kalau email nya sama dgn punya dia gpp
+	data, errFindEmail := service.userRepository.FindUser(input.Email)
+
+	helper.LogDebug("\n\n\n find email input  ", input.Email, "--- id ", id)
+	helper.LogDebug("\n\n\n find email data  ", data.Email, "--- id ", data.ID)
+
+	if (data.Email == input.Email) && (data.ID != uint(id)) {
+		return errors.New("Failed. Email " + input.Email + " already exist at other user. Please pick another email.")
+	}
+
+	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
+		return helper.ServiceErrorMsg(errFindEmail)
 	}
 
 	// proses

@@ -1,16 +1,34 @@
-name: Deploy to GCP
+name: build-push
 
 on:
   push:
     branches:
-      - main
+      - 'main'
 
 jobs:
-  build:
-    name: Build
+  docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Connect to server using SSH
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: mfaishal882/api-airbnb-alta-img:latest
+      - 
+        name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -18,9 +36,14 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /project/api-airbnb-alta
-            git pull origin main
-            docker stop api-airbnb-alta
-            docker rm api-airbnb-alta
-            docker build -t api-airbnb-alta-images:latest .
-            docker run -d -p 8005:8005 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_NAME=${{ secrets.DB_NAME }} -e JWT_SECRET=${{secrets.JWT_SECRET}} --name api-airbnb-alta --link mysqlContainer api-airbnb-alta-images:latest
+              docker stop apiAirBnbAlta
+              docker rm apiAirBnbAlta
+              docker rmi mfaishal882/api-airbnb-alta-img:latest
+              docker run --name apiAirBnbAlta --link mysqlContainer -d -p 8005:8005 -e SERVER_PORT=${{secrets.SERVER_PORT}} -e DB_USERNAME=${{secrets.DB_USERNAME}} -e DB_PASSWORD=${{secrets.DB_PASSWORD}} -e DB_HOST=${{secrets.DB_HOST}} -e DB_PORT=${{secrets.DB_PORT}} -e DB_NAME=${{secrets.DB_NAME}} -e JWT_SECRET=${{secrets.JWT_SECRET}} mfaishal882/api-airbnb-alta-img:latest
+              export DB_USERNAME="root"
+
+
+
+
+          
+ 

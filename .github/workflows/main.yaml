@@ -20,7 +20,7 @@ jobs:
           script: |
             cd /project/api-airbnb-alta
             git pull origin main
-            docker stop apiAirbnbAlta
-            docker rm apiAirbnbAlta
-            docker build -t apiAirbnbAlta-images:latest .
-            docker run -d -p 8005:8005 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_NAME=${{ secrets.DB_NAME }} -e JWT_SECRET=${{secrets.JWT_SECRET}} --name apiAirbnbAlta --link mysqlContainer apiAirbnbAlta-images:latest
+            docker stop api-airbnb-alta
+            docker rm api-airbnb-alta
+            docker build -t api-airbnb-alta-images:latest .
+            docker run -d -p 8005:8005 -e SERVER_PORT=${{ secrets.SERVER_PORT }} -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_NAME=${{ secrets.DB_NAME }} -e JWT_SECRET=${{secrets.JWT_SECRET}} --name api-airbnb-alta --link mysqlContainer api-airbnb-alta-images:latest

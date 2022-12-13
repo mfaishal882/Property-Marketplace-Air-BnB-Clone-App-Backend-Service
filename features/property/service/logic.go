@@ -4,6 +4,7 @@ import (
 	"api-airbnb-alta/features/property"
 	"api-airbnb-alta/middlewares"
 	"api-airbnb-alta/utils/helper"
+	"api-airbnb-alta/utils/thirdparty"
 	"errors"
 
 	"github.com/go-playground/validator/v10"
@@ -28,6 +29,18 @@ func (service *propertyService) Create(input property.Core, c echo.Context) erro
 	id := middlewares.ExtractTokenUserId(c)
 	input.UserID = uint(id)
 	input.RatingAverage = 0
+	file, _ := c.FormFile("file")
+	if file != nil {
+		res, err := thirdparty.UploadProfile(c)
+		if err != nil {
+			return errors.New("registration failed. cannot upload data")
+		}
+		log.Print(res)
+		input.ImageThumbnail = res
+	} else {
+		input.ImageThumbnail = "https://thumbs.dreamstime.com/b/house-vector-icon-home-logo-isolated-white-background-house-vector-icon-home-logo-vector-illustration-138343234.jpg"
+	}
+
 	errCreate := service.propertyRepository.Create(input)
 	if errCreate != nil {
 		return errors.New("failed to insert data, error query")

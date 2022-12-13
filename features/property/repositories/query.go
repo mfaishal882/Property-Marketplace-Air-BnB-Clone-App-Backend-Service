@@ -19,6 +19,7 @@ func New(db *gorm.DB) property.RepositoryInterface {
 
 // Create implements property.RepositoryInterface
 func (repo *propertyRepository) Create(input property.Core) error {
+	var user User
 	userGorm := fromCore(input)
 	tx := repo.db.Create(&userGorm) // proses insert data
 	if tx.Error != nil {
@@ -26,6 +27,11 @@ func (repo *propertyRepository) Create(input property.Core) error {
 	}
 	if tx.RowsAffected == 0 {
 		return errors.New("insert failed")
+	}
+
+	tx2 := repo.db.Model(&user).Where("id = ?", input.UserID).Update("isHosting", "Yes")
+	if tx2.Error != nil {
+		return tx.Error
 	}
 	return nil
 }

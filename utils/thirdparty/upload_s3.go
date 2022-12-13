@@ -75,7 +75,7 @@ func UploadProfile(c echo.Context) (string, error) {
 	return res.Location, err
 }
 
-func UploadProfileProduct(c echo.Context) (string, error) {
+func Upload(c echo.Context) (string, error) {
 
 	file, fileheader, err := c.Request().FormFile("file")
 	if err != nil {
@@ -96,10 +96,10 @@ func UploadProfileProduct(c echo.Context) (string, error) {
 	uploader := s3manager.NewUploader(s3Session)
 
 	input := &s3manager.UploadInput{
-		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                       // bucket's name
-		Key:         aws.String("product/" + randomStr + "-" + fileheader.Filename), // files destination location
-		Body:        file,                                                           // content of the file
-		ContentType: aws.String("image/jpg"),                                        // content type
+		Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),                        // bucket's name
+		Key:         aws.String("property/" + randomStr + "-" + fileheader.Filename), // files destination location
+		Body:        file,                                                            // content of the file
+		ContentType: aws.String("image/jpg"),                                         // content type
 	}
 	res, err := uploader.UploadWithContext(context.Background(), input)
 

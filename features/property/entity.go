@@ -25,12 +25,23 @@ type Core struct {
 	UpdatedAt         time.Time
 }
 
+type PropertyImage struct {
+	ID         uint
+	Title      string
+	ImageUrl   string `valiidate:"required"`
+	PropertyID uint   `valiidate:"required"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
 type ServiceInterface interface {
 	GetAll(queryName, queryCity, queryPropertyType string) (data []Core, err error)
 	Create(input Core, c echo.Context) error
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int) error
 	Delete(id int) error
+	GetPropertyImages(id int) (data []PropertyImage, err error)
+	GetPropertyComments(id int) (data []PropertyImage, err error)
 }
 
 type RepositoryInterface interface {
@@ -40,4 +51,6 @@ type RepositoryInterface interface {
 	GetById(id int) (data Core, err error)
 	Update(input Core, id int) error
 	Delete(id int) error
+	GetPropertyImages(id int) (data []PropertyImage, err error)
+	GetPropertyComments(id int) (data []PropertyImage, err error)
 }

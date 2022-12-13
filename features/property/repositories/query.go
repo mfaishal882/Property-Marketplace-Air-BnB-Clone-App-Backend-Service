@@ -104,3 +104,19 @@ func (repo *propertyRepository) GetById(id int) (data property.Core, err error) 
 	var dataCore = property.toCore()
 	return dataCore, nil
 }
+
+// GetPropertyImages implements property.RepositoryInterface
+func (repo *propertyRepository) GetPropertyImages(id int) (data []property.PropertyImage, err error) {
+	var images []PropertyImage
+	tx := repo.db.Where("property_id = ?", id).Find(&images)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toPropertyImagesList(images)
+	return dataCore, nil
+}
+
+// GetPropertyComments implements property.RepositoryInterface
+func (*propertyRepository) GetPropertyComments(id int) (data []property.PropertyImage, err error) {
+	panic("unimplemented")
+}

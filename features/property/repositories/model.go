@@ -26,8 +26,14 @@ type Property struct {
 
 type User struct {
 	gorm.Model
-	FullName   string
-	Properties []Property
+	FullName        string
+	Email           string
+	Password        string
+	Phone           string
+	Gender          string
+	ProfileImageUrl string
+	IsHosting       string
+	Properties      []Property
 }
 
 func fromCore(dataCore _property.Core) Property {

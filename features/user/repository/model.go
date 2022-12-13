@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-//struct gorm model
+// struct gorm model
 type User struct {
 	gorm.Model
 	FullName        string `validate:"required"`
@@ -46,9 +46,9 @@ type Property struct {
 
 type Comment struct {
 	gorm.Model
-	title      string
-	comment    string
-	rating     float64
+	Title      string
+	Comment    string
+	Rating     float64
 	UserID     uint
 	PropertyID uint
 }
@@ -56,7 +56,7 @@ type Comment struct {
 // DTO
 // mapping
 
-//mengubah struct core ke struct model gorm
+// mengubah struct core ke struct model gorm
 func fromCore(dataCore _user.Core) User {
 	userGorm := User{
 		FullName:        dataCore.FullName,
@@ -70,7 +70,7 @@ func fromCore(dataCore _user.Core) User {
 	return userGorm
 }
 
-//mengubah struct model gorm ke struct core
+// mengubah struct model gorm ke struct core
 func (dataModel *User) toCore() _user.Core {
 	return _user.Core{
 		ID:              dataModel.ID,
@@ -86,7 +86,7 @@ func (dataModel *User) toCore() _user.Core {
 	}
 }
 
-//mengubah slice struct model gorm ke slice struct core
+// mengubah slice struct model gorm ke slice struct core
 func toCoreList(dataModel []User) []_user.Core {
 	var dataCore []_user.Core
 	for _, v := range dataModel {

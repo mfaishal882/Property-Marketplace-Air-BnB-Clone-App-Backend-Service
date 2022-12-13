@@ -6,7 +6,7 @@ import (
 
 type InsertRequest struct {
 	PropertyName   string `json:"property_name" form:"property_name"`
-	PricePerNight  string `json:"price_per_night" form:"price_per_night"`
+	PricePerNight  int    `json:"price_per_night" form:"price_per_night"`
 	Description    string `json:"description" form:"description"`
 	Address        string `json:"address" form:"address"`
 	City           string `json:"city" form:"city"`

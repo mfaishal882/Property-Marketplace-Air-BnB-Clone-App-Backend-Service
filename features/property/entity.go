@@ -10,14 +10,14 @@ import (
 type Core struct {
 	ID             uint
 	PropertyName   string `valiidate:"required"`
-	PricePerNight  string `valiidate:"required"`
+	PricePerNight  int    `valiidate:"required"`
 	Description    string
 	Address        string `valiidate:"required"`
 	City           string `valiidate:"required"`
 	ContactNumber  string
 	Fasilities     string
 	PropertyType   string
-	RatingAverage  uint
+	RatingAverage  float64
 	ImageThumbnail string
 	UserID         uint
 	User           user.Core

@@ -9,7 +9,7 @@ import (
 type Property struct {
 	gorm.Model
 	PropertyName   string `valiidate:"required"`
-	PricePerNight  string `valiidate:"required"`
+	PricePerNight  int    `valiidate:"required"`
 	Description    string
 	Address        string `valiidate:"required"`
 	City           string `valiidate:"required"`
@@ -18,7 +18,7 @@ type Property struct {
 	Fasilities     string
 	BookingStatus  string
 	PropertyType   string
-	RatingAverage  uint
+	RatingAverage  float64
 	ImageThumbnail string
 	UserID         uint
 	User           User

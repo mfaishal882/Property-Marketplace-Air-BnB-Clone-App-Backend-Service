@@ -5,18 +5,18 @@ import (
 )
 
 type PropertyResponse struct {
-	ID             uint   `json:"id"`
-	PropertyName   string `json:"property_name" form:"property_name"`
-	PricePerNight  string `json:"price_per_night" form:"price_per_night"`
-	Description    string `json:"description" form:"description"`
-	Address        string `json:"address" form:"address"`
-	City           string `json:"city" form:"city"`
-	ContactNumber  string `json:"contact_number" form:"contact_number"`
-	Fasilities     string `json:"fasilities" form:"fasilities"`
-	PropertyType   string `json:"property_type" form:"property_type"`
-	RatingAverage  uint   `json:"rating_average" form:"rating_average"`
-	ImageThumbnail string `json:"image_thumbnail" form:"image_thumbnail"`
-	UserID         uint   `json:"user_id" form:"user_id"`
+	ID             uint    `json:"id"`
+	PropertyName   string  `json:"property_name" form:"property_name"`
+	PricePerNight  int     `json:"price_per_night" form:"price_per_night"`
+	Description    string  `json:"description" form:"description"`
+	Address        string  `json:"address" form:"address"`
+	City           string  `json:"city" form:"city"`
+	ContactNumber  string  `json:"contact_number" form:"contact_number"`
+	Fasilities     string  `json:"fasilities" form:"fasilities"`
+	PropertyType   string  `json:"property_type" form:"property_type"`
+	RatingAverage  float64 `json:"rating_average" form:"rating_average"`
+	ImageThumbnail string  `json:"image_thumbnail" form:"image_thumbnail"`
+	UserID         uint    `json:"user_id" form:"user_id"`
 }
 
 func fromCore(dataCore property.Core) PropertyResponse {

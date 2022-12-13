@@ -22,8 +22,8 @@ func New(service propertyImage.ServiceInterface, e *echo.Echo) {
 	e.GET("/property_images", handler.GetAll, middlewares.JWTMiddleware())
 	e.GET("/property_images/:id", handler.GetById, middlewares.JWTMiddleware())
 	e.POST("/property_images", handler.Create, middlewares.JWTMiddleware())
-	e.PUT("/property_images/:id", handler.Update, middlewares.JWTMiddleware(), middlewares.UserOnlySameId)
-	e.DELETE("/property_images/:id", handler.Delete, middlewares.JWTMiddleware(), middlewares.UserOnlySameId)
+	e.PUT("/property_images/:id", handler.Update, middlewares.JWTMiddleware())
+	e.DELETE("/property_images/:id", handler.Delete, middlewares.JWTMiddleware())
 
 	//middlewares.IsAdmin = untuk membatasi akses endpoint hanya admin
 	//middlewares.UserOnlySameId = untuk membatasi akses user mengelola data diri sendiri saja
@@ -89,7 +89,7 @@ func (delivery *PropertyImageDelivery) Update(c echo.Context) error {
 	}
 
 	dataCore := toCore(userInput)
-	err := delivery.propertyImageService.Update(dataCore, id)
+	err := delivery.propertyImageService.Update(dataCore, id, c)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data. "+err.Error()))
 	}

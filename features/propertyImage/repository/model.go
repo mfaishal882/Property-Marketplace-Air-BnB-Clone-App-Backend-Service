@@ -14,6 +14,22 @@ type PropertyImage struct {
 	PropertyID uint   `valiidate:"required"`
 }
 
+type Property struct {
+	gorm.Model
+	PropertyName      string
+	PricePerNight     int
+	Description       string
+	Address           string
+	City              string
+	ContactNumber     string
+	Facilities        string
+	PropertyType      string
+	RatingAverage     float64
+	ImageThumbnailUrl string
+	UserID            uint
+	PropertyImages    []PropertyImage
+}
+
 // DTO
 // mapping
 

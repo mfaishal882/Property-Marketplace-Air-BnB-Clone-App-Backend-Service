@@ -16,7 +16,41 @@ type User struct {
 	Gender          string
 	ProfileImageUrl string
 	IsHosting       string
-	// Books    []Book
+	Propertys       []Property
+	Comments        []Comment
+}
+
+type PropertyImage struct {
+	gorm.Model
+	Title      string
+	ImageUrl   string `valiidate:"required"`
+	PropertyID uint   `valiidate:"required"`
+}
+
+type Property struct {
+	gorm.Model
+	PropertyName      string
+	PricePerNight     int
+	Description       string
+	Address           string
+	City              string
+	ContactNumber     string
+	Facilities        string
+	PropertyType      string
+	RatingAverage     float64
+	ImageThumbnailUrl string
+	UserID            uint
+	PropertyImages    []PropertyImage
+	Comments          []Comment
+}
+
+type Comment struct {
+	gorm.Model
+	title      string
+	comment    string
+	rating     float64
+	UserID     uint
+	PropertyID uint
 }
 
 // DTO

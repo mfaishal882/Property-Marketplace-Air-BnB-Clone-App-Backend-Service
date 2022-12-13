@@ -35,11 +35,13 @@ func (service *propertyImageService) Create(input propertyImage.Core, c echo.Con
 	if file != nil {
 		res, err := thirdparty.Upload(c)
 		if err != nil {
+			helper.LogDebug("Failed Upload : ", res, " Error ", err)
 			return errors.New("Registration Failed. Cannot Upload Data.")
 		}
-		log.Print(res)
+		helper.LogDebug("Success Upload : ", res)
 		input.ImageUrl = res
 	} else {
+		helper.LogDebug("Failed Upload : using default picture")
 		input.ImageUrl = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
@@ -80,13 +82,28 @@ func (service *propertyImageService) GetById(id int) (data propertyImage.Core, e
 
 }
 
-func (service *propertyImageService) Update(input propertyImage.Core, id int) error {
+func (service *propertyImageService) Update(input propertyImage.Core, id int, c echo.Context) error {
 
 	// validasi user dgn id path param, apakah ada datanya di database
 	_, errFindId := service.propertyImageRepository.GetById(id)
 	if errFindId != nil {
 		log.Error(errFindId.Error())
 		return helper.ServiceErrorMsg(errFindId)
+	}
+
+	// upload foto
+	file, _ := c.FormFile("file")
+	if file != nil {
+		res, err := thirdparty.Upload(c)
+		if err != nil {
+			helper.LogDebug("Failed Upload : ", res, " Error ", err)
+			return errors.New("Registration Failed. Cannot Upload Data.")
+		}
+		helper.LogDebug("Success Upload : ", res)
+		input.ImageUrl = res
+	} else {
+		helper.LogDebug("Failed Upload : using default picture")
+		input.ImageUrl = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
 	// proses

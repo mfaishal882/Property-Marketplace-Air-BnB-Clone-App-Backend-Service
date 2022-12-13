@@ -19,7 +19,7 @@ type ServiceInterface interface {
 	GetAll(query string) (data []Core, err error)
 	Create(input Core, c echo.Context) error
 	GetById(id int) (data Core, err error)
-	Update(input Core, id int) error
+	Update(input Core, id int, c echo.Context) error
 	Delete(id int) error
 }
 

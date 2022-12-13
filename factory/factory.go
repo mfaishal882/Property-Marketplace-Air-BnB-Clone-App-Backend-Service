@@ -9,6 +9,10 @@ import (
 	userRepo "api-airbnb-alta/features/user/repository"
 	userService "api-airbnb-alta/features/user/service"
 
+	propertyImageDelivery "api-airbnb-alta/features/propertyImage/delivery"
+	propertyImageRepo "api-airbnb-alta/features/propertyImage/repository"
+	propertyImageService "api-airbnb-alta/features/propertyImage/service"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -22,5 +26,9 @@ func InitFactory(e *echo.Echo, db *gorm.DB) {
 	authRepoFactory := authRepo.New(db)
 	authServiceFactory := authService.New(authRepoFactory)
 	authDelivery.New(authServiceFactory, e)
+
+	propertyImageRepoFactory := propertyImageRepo.New(db)
+	propertyImageServiceFactory := propertyImageService.New(propertyImageRepoFactory)
+	propertyImageDelivery.New(propertyImageServiceFactory, e)
 
 }

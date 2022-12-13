@@ -36,9 +36,9 @@ func (service *propertyService) Create(input property.Core, c echo.Context) erro
 			return errors.New("registration failed. cannot upload data")
 		}
 		log.Print(res)
-		input.ImageThumbnail = res
+		input.ImageThumbnailUrl = res
 	} else {
-		input.ImageThumbnail = "https://thumbs.dreamstime.com/b/house-vector-icon-home-logo-isolated-white-background-house-vector-icon-home-logo-vector-illustration-138343234.jpg"
+		input.ImageThumbnailUrl = "https://thumbs.dreamstime.com/b/house-vector-icon-home-logo-isolated-white-background-house-vector-icon-home-logo-vector-illustration-138343234.jpg"
 	}
 
 	errCreate := service.propertyRepository.Create(input)
@@ -51,11 +51,17 @@ func (service *propertyService) Create(input property.Core, c echo.Context) erro
 // GetAll implements properties.ServiceInterface
 func (service *propertyService) GetAll(queryName, queryCity, queryPropertyType string) (data []property.Core, err error) {
 
-	data, err = service.propertyRepository.GetAllWithSearch(queryName, queryCity, queryPropertyType)
-	if err != nil {
-		return nil, err
+	if queryName == "" && queryCity == "" && queryPropertyType == "" {
+		data, err = service.propertyRepository.GetAll()
+	} else {
+		data, err = service.propertyRepository.GetAllWithSearch(queryName, queryCity, queryPropertyType)
 	}
-	return
+
+	if err != nil {
+		helper.LogDebug(err)
+		return nil, helper.ServiceErrorMsg(err)
+	}
+	return data, nil
 }
 
 // GetById implements properties.ServiceInterface

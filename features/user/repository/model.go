@@ -46,9 +46,9 @@ type Property struct {
 
 type Comment struct {
 	gorm.Model
-	title      string
-	comment    string
-	rating     float64
+	Title      string
+	Comment    string
+	Rating     float64
 	UserID     uint
 	PropertyID uint
 }

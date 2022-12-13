@@ -94,3 +94,18 @@ func (service *propertyService) Update(input property.Core, id int) error {
 
 	return nil
 }
+
+// GetPropertyImages implements property.ServiceInterface
+func (service *propertyService) GetPropertyImages(id int) (data []property.PropertyImage, err error) {
+	data, err = service.propertyRepository.GetPropertyImages(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+	return data, err
+}
+
+// GetPropertyComments implements property.ServiceInterface
+func (*propertyService) GetPropertyComments(id int) (data []property.PropertyImage, err error) {
+	panic("unimplemented")
+}

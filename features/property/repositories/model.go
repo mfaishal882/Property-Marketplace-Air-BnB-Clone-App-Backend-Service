@@ -20,6 +20,7 @@ type Property struct {
 	ImageThumbnailUrl string
 	UserID            uint
 	User              User
+	PropertyImages    []PropertyImage
 }
 
 type User struct {
@@ -32,6 +33,13 @@ type User struct {
 	ProfileImageUrl string
 	IsHosting       string
 	Properties      []Property
+}
+
+type PropertyImage struct {
+	gorm.Model
+	Title      string
+	ImageUrl   string `valiidate:"required"`
+	PropertyID uint   `valiidate:"required"`
 }
 
 func fromCore(dataCore _property.Core) Property {
@@ -75,6 +83,25 @@ func toCoreList(dataModel []Property) []_property.Core {
 	var dataCore []_property.Core
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCore())
+	}
+	return dataCore
+}
+
+func (dataModel *PropertyImage) toCorePropertyImage() _property.PropertyImage {
+	return _property.PropertyImage{
+		ID:         dataModel.ID,
+		Title:      dataModel.Title,
+		ImageUrl:   dataModel.ImageUrl,
+		PropertyID: dataModel.PropertyID,
+		CreatedAt:  dataModel.CreatedAt,
+		UpdatedAt:  dataModel.UpdatedAt,
+	}
+}
+
+func toPropertyImagesList(dataModel []PropertyImage) []_property.PropertyImage {
+	var dataCore []_property.PropertyImage
+	for _, v := range dataModel {
+		dataCore = append(dataCore, v.toCorePropertyImage())
 	}
 	return dataCore
 }

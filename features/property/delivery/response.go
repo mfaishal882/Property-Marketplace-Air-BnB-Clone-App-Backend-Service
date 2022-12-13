@@ -29,6 +29,13 @@ type PropertyResponseGetAll struct {
 	ImageThumbnailUrl string  `json:"image_thumbnail_url" form:"image_thumbnail_url"`
 }
 
+type PropertyImagesResponse struct {
+	ID         uint   `json:"id"`
+	Title      string `json:"title" form:"title"`
+	ImageUrl   string `json:"image_url" form:"image_url"`
+	PropertyID uint   `json:"properties_id" form:"properties_id"`
+}
+
 func fromCore(dataCore property.Core) PropertyResponseGetAll {
 	return PropertyResponseGetAll{
 		ID:                dataCore.ID,
@@ -64,4 +71,21 @@ func fromCoreById(dataCore property.Core) PropertyResponse {
 		ImageThumbnailUrl: dataCore.ImageThumbnailUrl,
 		UserID:            dataCore.UserID,
 	}
+}
+
+func fromPropertyImages(dataCore property.PropertyImage) PropertyImagesResponse {
+	return PropertyImagesResponse{
+		ID:         dataCore.ID,
+		Title:      dataCore.Title,
+		ImageUrl:   dataCore.ImageUrl,
+		PropertyID: dataCore.PropertyID,
+	}
+}
+
+func fromPropertyImagesList(dataCore []property.PropertyImage) []PropertyImagesResponse {
+	var dataResponse []PropertyImagesResponse
+	for _, v := range dataCore {
+		dataResponse = append(dataResponse, fromPropertyImages(v))
+	}
+	return dataResponse
 }

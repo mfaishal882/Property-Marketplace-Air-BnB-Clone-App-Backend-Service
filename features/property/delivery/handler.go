@@ -24,6 +24,9 @@ func New(service property.ServiceInterface, e *echo.Echo) {
 	e.POST("/properties", handler.Create, middlewares.JWTMiddleware())
 	e.PUT("/properties/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/properties/:id", handler.Delete, middlewares.JWTMiddleware())
+	e.GET("/properties/:id/images", handler.GetPropertyImages, middlewares.JWTMiddleware())
+	e.GET("/properties/:id/comments", handler.GetPropertyComments, middlewares.JWTMiddleware())
+	e.GET("/properties/:id/availability", handler.GetAvailability, middlewares.JWTMiddleware())
 
 	//middlewares.IsAdmin = untuk membatasi akses endpoint hanya admin
 	//middlewares.UserOnlySameId = untuk membatasi akses user mengelola data diri sendiri saja
@@ -118,4 +121,52 @@ func (delivery *PropertyDelivery) Delete(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success delete data."))
+}
+
+func (delivery *PropertyDelivery) GetPropertyImages(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
+	results, err := delivery.propertyService.GetPropertyImages(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
+
+	dataResponse := fromPropertyImagesList(results)
+
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+}
+
+func (delivery *PropertyDelivery) GetPropertyComments(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
+	results, err := delivery.propertyService.GetPropertyImages(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
+
+	dataResponse := fromPropertyImagesList(results)
+
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
+}
+
+func (delivery *PropertyDelivery) GetAvailability(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
+	results, err := delivery.propertyService.GetPropertyImages(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
+
+	dataResponse := fromPropertyImagesList(results)
+
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
 }

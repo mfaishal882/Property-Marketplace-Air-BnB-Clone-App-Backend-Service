@@ -67,7 +67,7 @@ func (repo *propertyRepository) Update(input property.Core, id int) error {
 func (repo *propertyRepository) GetAllWithSearch(queryName, queryCity, queryPropertyType string) (data []property.Core, err error) {
 	var property []Property
 
-	tx := repo.db.Where("full_name LIKE ?", "%"+queryName+"%", "city LIKE ?", "%"+queryCity+"%", "property_type LIKE ?", "%"+queryPropertyType+"%").Find(&property)
+	tx := repo.db.Where("property_name LIKE ?", "%"+queryName+"%", "city LIKE ?", "%"+queryCity+"%", "property_type LIKE ?", "%"+queryPropertyType+"%").Find(&property)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}

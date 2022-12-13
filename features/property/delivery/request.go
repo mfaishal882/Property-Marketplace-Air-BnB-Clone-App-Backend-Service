@@ -11,7 +11,7 @@ type InsertRequest struct {
 	Address        string `json:"address" form:"address"`
 	City           string `json:"city" form:"city"`
 	ContactNumber  string `json:"contact_number" form:"contact_number"`
-	Fasilities     string `json:"fasilities" form:"fasilities"`
+	Facilities     string `json:"facilities" form:"facilities"`
 	PropertyType   string `json:"property_type" form:"property_type"`
 	ImageThumbnail string `json:"image_thumbnail" form:"image_thumbnail"`
 	UserID         uint   `json:"user_id" form:"user_id"`
@@ -19,15 +19,16 @@ type InsertRequest struct {
 
 func toCore(propertyInput InsertRequest) property.Core {
 	propertyCoreData := property.Core{
-		PropertyName:   propertyInput.PropertyName,
-		Description:    propertyInput.Description,
-		Address:        propertyInput.Address,
-		City:           propertyInput.City,
-		ContactNumber:  propertyInput.ContactNumber,
-		Fasilities:     propertyInput.Fasilities,
-		PropertyType:   propertyInput.PropertyType,
-		ImageThumbnail: propertyInput.ImageThumbnail,
-		UserID:         propertyInput.UserID,
+		PropertyName:      propertyInput.PropertyName,
+		PricePerNight:     propertyInput.PricePerNight,
+		Description:       propertyInput.Description,
+		Address:           propertyInput.Address,
+		City:              propertyInput.City,
+		ContactNumber:     propertyInput.ContactNumber,
+		Facilities:        propertyInput.Facilities,
+		PropertyType:      propertyInput.PropertyType,
+		ImageThumbnailUrl: propertyInput.ImageThumbnail,
+		UserID:            propertyInput.UserID,
 	}
 	return propertyCoreData
 }

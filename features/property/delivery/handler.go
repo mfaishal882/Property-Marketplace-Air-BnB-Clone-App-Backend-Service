@@ -30,18 +30,18 @@ func New(service property.ServiceInterface, e *echo.Echo) {
 }
 
 func (delivery *PropertyDelivery) GetAll(c echo.Context) error {
-	queryName := c.QueryParam("name")
+	queryPropertyName := c.QueryParam("property_name")
 	queryCity := c.QueryParam("city")
 	queryPropertyType := c.QueryParam("property_type")
 
 	helper.LogDebug("\n\n\nULALA")
 
 	// debug cek query param masuk
-	helper.LogDebug("\n isi queryName = ", queryName)
-	helper.LogDebug("\n isi queryIDClass= ", queryCity)
-	helper.LogDebug("\n isi queryStatus = ", queryPropertyType)
+	helper.LogDebug("\n isi queryPropertyName = ", queryPropertyName)
+	helper.LogDebug("\n isi queryCity= ", queryCity)
+	helper.LogDebug("\n isi queryPropertyType = ", queryPropertyType)
 
-	results, err := delivery.propertyService.GetAll(queryName, queryCity, queryPropertyType)
+	results, err := delivery.propertyService.GetAll(queryPropertyName, queryCity, queryPropertyType)
 	if err != nil {
 
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
@@ -63,7 +63,7 @@ func (delivery *PropertyDelivery) GetById(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
-	dataResponse := fromCore(results)
+	dataResponse := fromCoreById(results)
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
 }
@@ -76,6 +76,7 @@ func (delivery *PropertyDelivery) Create(c echo.Context) error {
 	}
 
 	dataCore := toCore(propertyInput)
+	helper.LogDebug("\n dataCore = ", dataCore)
 	err := delivery.propertyService.Create(dataCore, c)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed insert data. "+err.Error()))

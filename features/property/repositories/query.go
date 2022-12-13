@@ -52,8 +52,8 @@ func (repo *propertyRepository) Delete(id int) error {
 // Update implements property.RepositoryInterface
 func (repo *propertyRepository) Update(input property.Core, id int) error {
 	userGorm := fromCore(input)
-	var user User
-	tx := repo.db.Model(&user).Where("ID = ?", id).Updates(&userGorm) // proses update
+	var property Property
+	tx := repo.db.Model(&property).Where("ID = ?", id).Updates(&userGorm) // proses update
 	if tx.Error != nil {
 		return tx.Error
 	}
@@ -64,14 +64,26 @@ func (repo *propertyRepository) Update(input property.Core, id int) error {
 }
 
 // GetAll implements property.RepositoryInterface
-func (repo *propertyRepository) GetAllWithSearch(queryName, queryCity, queryPropertyType string) (data []property.Core, err error) {
+func (repo *propertyRepository) GetAllWithSearch(queryPropertyName, queryCity, queryPropertyType string) (data []property.Core, err error) {
 	var property []Property
 
-	tx := repo.db.Where("property_name LIKE ?", "%"+queryName+"%", "city LIKE ?", "%"+queryCity+"%", "property_type LIKE ?", "%"+queryPropertyType+"%").Find(&property)
+	tx := repo.db.Where("property_name LIKE ?", "%"+queryPropertyName+"%").Where(&Property{City: queryCity, PropertyType: queryPropertyType}).Find(&property)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
 	var dataCore = toCoreList(property)
+	return dataCore, nil
+}
+
+// GetAll implements property.RepositoryInterface
+func (repo *propertyRepository) GetAll() (data []property.Core, err error) {
+	var properties []Property
+
+	tx := repo.db.Find(&properties)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toCoreList(properties)
 	return dataCore, nil
 }
 

@@ -27,6 +27,7 @@ func fromCore(dataCore booking.Core) DataResponse {
 		BookingStatus: dataCore.BookingStatus,
 		UserName:      dataCore.User.FullName,
 		PropertyName:  dataCore.Property.PropertyName,
+		CreatedAt:     dataCore.CreatedAt,
 	}
 }
 

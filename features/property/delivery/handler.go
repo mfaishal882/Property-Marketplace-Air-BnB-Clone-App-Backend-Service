@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -48,7 +49,9 @@ func (delivery *PropertyDelivery) GetAll(c echo.Context) error {
 
 	results, err := delivery.propertyService.GetAll(queryPropertyName, queryCity, queryPropertyType)
 	if err != nil {
-
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
@@ -65,6 +68,9 @@ func (delivery *PropertyDelivery) GetById(c echo.Context) error {
 	}
 	results, err := delivery.propertyService.GetById(id)
 	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
@@ -133,6 +139,9 @@ func (delivery *PropertyDelivery) GetPropertyImages(c echo.Context) error {
 	}
 	results, err := delivery.propertyService.GetPropertyImages(id)
 	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
@@ -149,6 +158,9 @@ func (delivery *PropertyDelivery) GetPropertyComments(c echo.Context) error {
 	}
 	results, err := delivery.propertyService.GetPropertyComments(id)
 	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 

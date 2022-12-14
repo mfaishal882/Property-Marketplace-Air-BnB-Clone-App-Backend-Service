@@ -39,13 +39,18 @@ func (service *bookingService) Create(input booking.Core, c echo.Context) error 
 
 // GetAll implements booking.ServiceInterface
 func (service *bookingService) GetAll() (data []booking.Core, err error) {
-	dataCore, err := service.bookingRepository.GetAll()
+	data, err = service.bookingRepository.GetAll()
 
 	if err != nil {
 		helper.LogDebug(err)
 		return nil, helper.ServiceErrorMsg(err)
 	}
-	return dataCore, nil
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+	return data, nil
 }
 
 // GetById implements booking.ServiceInterface
@@ -55,6 +60,12 @@ func (service *bookingService) GetById(id int) (data booking.Core, err error) {
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
 	}
+
+	if data == (booking.Core{}) {
+		helper.LogDebug("Get data success. No data.")
+		return booking.Core{}, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 
 }

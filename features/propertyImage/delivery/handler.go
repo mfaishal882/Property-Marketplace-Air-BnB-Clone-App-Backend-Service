@@ -6,6 +6,7 @@ import (
 	"api-airbnb-alta/utils/helper"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -35,7 +36,9 @@ func (delivery *PropertyImageDelivery) GetAll(c echo.Context) error {
 	helper.LogDebug("isi query = ", query)
 	results, err := delivery.propertyImageService.GetAll(query)
 	if err != nil {
-
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
@@ -52,6 +55,9 @@ func (delivery *PropertyImageDelivery) GetById(c echo.Context) error {
 	}
 	results, err := delivery.propertyImageService.GetById(id)
 	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 

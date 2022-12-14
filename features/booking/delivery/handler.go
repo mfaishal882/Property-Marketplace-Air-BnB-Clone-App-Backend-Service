@@ -6,6 +6,7 @@ import (
 	"api-airbnb-alta/utils/helper"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -27,7 +28,9 @@ func New(service booking.ServiceInterface, e *echo.Echo) {
 func (delivery *BookingDelivery) GetAll(c echo.Context) error {
 	results, err := delivery.bookingService.GetAll()
 	if err != nil {
-
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
@@ -44,6 +47,9 @@ func (delivery *BookingDelivery) GetById(c echo.Context) error {
 	}
 	results, err := delivery.bookingService.GetById(id)
 	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 

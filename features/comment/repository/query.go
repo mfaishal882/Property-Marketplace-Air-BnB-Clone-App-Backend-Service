@@ -19,6 +19,7 @@ func New(db *gorm.DB) comment.RepositoryInterface {
 
 // Create implements user.Repository
 func (repo *commentRepository) Create(input comment.Core) error {
+	var property Property
 	userGorm := fromCore(input)
 	tx := repo.db.Create(&userGorm) // proses insert data
 	if tx.Error != nil {
@@ -26,6 +27,16 @@ func (repo *commentRepository) Create(input comment.Core) error {
 	}
 	if tx.RowsAffected == 0 {
 		return errors.New("insert failed")
+	}
+
+	tx1 := repo.db.First(&property, input.PropertyID)
+	if tx1.Error != nil {
+		return tx1.Error
+	}
+	avg := (property.RatingAverage + input.Rating) / 2
+	tx2 := repo.db.Model(&property).Where("id = ?", input.PropertyID).Update("rating_average", avg)
+	if tx2.Error != nil {
+		return tx.Error
 	}
 	return nil
 }

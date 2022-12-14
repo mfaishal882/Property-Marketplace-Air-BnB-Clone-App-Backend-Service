@@ -24,6 +24,7 @@ func New(service user.ServiceInterface, e *echo.Echo) {
 	e.POST("/users", handler.Create)
 	e.PUT("/users/:id", handler.Update, middlewares.JWTMiddleware(), middlewares.UserOnlySameId)
 	e.DELETE("/users/:id", handler.Delete, middlewares.JWTMiddleware(), middlewares.UserOnlySameId)
+	e.GET("/users/:id/properties", handler.GetProperties, middlewares.JWTMiddleware())
 
 	//middlewares.IsAdmin = untuk membatasi akses endpoint hanya admin
 	//middlewares.UserOnlySameId = untuk membatasi akses user mengelola data diri sendiri saja
@@ -109,4 +110,20 @@ func (delivery *UserDelivery) Delete(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, helper.SuccessResponse("Success delete data."))
+}
+
+func (delivery *UserDelivery) GetProperties(c echo.Context) error {
+	idParam := c.Param("id")
+	id, errConv := strconv.Atoi(idParam)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
+	}
+	results, err := delivery.userService.GetProperties(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
+
+	dataResponse := fromPropertiesList(results)
+
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
 }

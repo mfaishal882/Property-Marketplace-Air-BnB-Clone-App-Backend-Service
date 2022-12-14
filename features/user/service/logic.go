@@ -168,3 +168,13 @@ func (service *userService) Delete(id int) error {
 	}
 	return nil
 }
+
+// GetProperties implements user.ServiceInterface
+func (service *userService) GetProperties(id int) (data []user.Property, err error) {
+	data, err = service.userRepository.GetProperties(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+	return data, err
+}

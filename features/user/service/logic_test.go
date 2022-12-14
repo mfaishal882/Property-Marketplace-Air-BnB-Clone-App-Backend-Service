@@ -1,68 +1,68 @@
 package service
 
-import (
-	"api-airbnb-alta/features/user"
-	"api-airbnb-alta/mocks"
-	"errors"
-	"testing"
+// import (
+// 	"api-airbnb-alta/features/user"
+// 	"api-airbnb-alta/mocks"
+// 	"errors"
+// 	"testing"
 
-	"github.com/stretchr/testify/assert"
-)
+// 	"github.com/stretchr/testify/assert"
+// )
 
-func TestGetAll(t *testing.T) {
-	repo := new(mocks.UserRepository)
-	t.Run("Success get all user", func(t *testing.T) {
-		inputRepo := []user.Core{{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}}
-		repo.On("GetAll").Return(inputRepo, nil).Once()
-		srv := New(repo)
-		response, err := srv.GetAll("")
-		assert.NoError(t, err)
-		assert.Equal(t, inputRepo[0].FullName, response[0].FullName)
-		repo.AssertExpectations(t)
-	})
+// func TestGetAll(t *testing.T) {
+// 	repo := new(mocks.UserRepository)
+// 	t.Run("Success get all user", func(t *testing.T) {
+// 		inputRepo := []user.Core{{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}}
+// 		repo.On("GetAll").Return(inputRepo, nil).Once()
+// 		srv := New(repo)
+// 		response, err := srv.GetAll("")
+// 		assert.NoError(t, err)
+// 		assert.Equal(t, inputRepo[0].FullName, response[0].FullName)
+// 		repo.AssertExpectations(t)
+// 	})
 
-	t.Run("Failed get all", func(t *testing.T) {
-		repo.On("GetAll").Return(nil, errors.New("failed")).Once()
-		srv := New(repo)
-		response, err := srv.GetAll("")
-		assert.NotNil(t, err)
-		assert.Nil(t, response)
-		repo.AssertExpectations(t)
-	})
+// 	t.Run("Failed get all", func(t *testing.T) {
+// 		repo.On("GetAll").Return(nil, errors.New("failed")).Once()
+// 		srv := New(repo)
+// 		response, err := srv.GetAll("")
+// 		assert.NotNil(t, err)
+// 		assert.Nil(t, response)
+// 		repo.AssertExpectations(t)
+// 	})
 
-	t.Run("Success get all with search ", func(t *testing.T) {
-		inputRepo := []user.Core{{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}}
-		repo.On("GetAllWithSearch", "query").Return(inputRepo, nil).Once()
-		srv := New(repo)
-		response, err := srv.GetAll("query")
-		assert.NoError(t, err)
-		assert.Equal(t, inputRepo[0].FullName, response[0].FullName)
-		repo.AssertExpectations(t)
-	})
-}
+// 	t.Run("Success get all with search ", func(t *testing.T) {
+// 		inputRepo := []user.Core{{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}}
+// 		repo.On("GetAllWithSearch", "query").Return(inputRepo, nil).Once()
+// 		srv := New(repo)
+// 		response, err := srv.GetAll("query")
+// 		assert.NoError(t, err)
+// 		assert.Equal(t, inputRepo[0].FullName, response[0].FullName)
+// 		repo.AssertExpectations(t)
+// 	})
+// }
 
-func TestGetById(t *testing.T) {
-	repo := new(mocks.UserRepository)
-	t.Run("Success get by id user", func(t *testing.T) {
-		returnData := user.Core{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}
-		repo.On("GetById", 1).Return(returnData, nil).Once()
-		srv := New(repo)
-		response, err := srv.GetById(1)
-		assert.NoError(t, err)
-		assert.Equal(t, returnData.FullName, response.FullName)
-		repo.AssertExpectations(t)
-	})
+// func TestGetById(t *testing.T) {
+// 	repo := new(mocks.UserRepository)
+// 	t.Run("Success get by id user", func(t *testing.T) {
+// 		returnData := user.Core{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}
+// 		repo.On("GetById", 1).Return(returnData, nil).Once()
+// 		srv := New(repo)
+// 		response, err := srv.GetById(1)
+// 		assert.NoError(t, err)
+// 		assert.Equal(t, returnData.FullName, response.FullName)
+// 		repo.AssertExpectations(t)
+// 	})
 
-	t.Run("Failed get by id user", func(t *testing.T) {
-		inputRepo := user.Core{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}
-		repo.On("GetById", 1).Return(user.Core{}, errors.New("failed")).Once()
-		srv := New(repo)
-		response, err := srv.GetById(1)
-		assert.NotNil(t, err)
-		assert.NotEqual(t, inputRepo.FullName, response.FullName)
-		repo.AssertExpectations(t)
-	})
-}
+// 	t.Run("Failed get by id user", func(t *testing.T) {
+// 		inputRepo := user.Core{ID: 1, FullName: "alta", Email: "alta", Password: "alta", Phone: "089213912", Gender: "Male", ProfileImageUrl: "https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg"}
+// 		repo.On("GetById", 1).Return(user.Core{}, errors.New("failed")).Once()
+// 		srv := New(repo)
+// 		response, err := srv.GetById(1)
+// 		assert.NotNil(t, err)
+// 		assert.NotEqual(t, inputRepo.FullName, response.FullName)
+// 		repo.AssertExpectations(t)
+// 	})
+// }
 
 // func TestCreate(t *testing.T) {
 // 	repo := new(mocks.UserRepository)

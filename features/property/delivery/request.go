@@ -17,6 +17,12 @@ type InsertRequest struct {
 	UserID         uint   `json:"user_id" form:"user_id"`
 }
 
+type CheckAvailRequest struct {
+	CheckinDate  string `json:"checkin_date" form:"checkin_date"`
+	CheckoutDate int    `json:"checkout_date" form:"checkout_date"`
+	PropertyID   string `json:"property_id" form:"property_id"`
+}
+
 func toCore(propertyInput InsertRequest) property.Core {
 	propertyCoreData := property.Core{
 		PropertyName:      propertyInput.PropertyName,

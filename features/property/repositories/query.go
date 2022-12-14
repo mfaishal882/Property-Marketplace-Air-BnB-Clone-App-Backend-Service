@@ -3,6 +3,8 @@ package repositories
 import (
 	property "api-airbnb-alta/features/property"
 	"errors"
+	"fmt"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -125,4 +127,32 @@ func (repo *propertyRepository) GetPropertyComments(id int) (data []property.Com
 	}
 	var dataCore = toPropertyCommentList(comments)
 	return dataCore, nil
+}
+
+// GetAll implements property.RepositoryInterface
+func (repo *propertyRepository) GetAvailability(propertyId uint, checkinDate time.Time, checkoutData time.Time) (result string, err error) {
+	var properties []Property
+	queryBuilder := fmt.Sprintf("SELECT * FROM bookings WHERE property_id = %d AND '%s' BETWEEN checkin_date AND checkout_date OR '%s' BETWEEN checkin_date AND checkout_date;", propertyId, checkinDate, checkoutData)
+	// tx := repo.db.Raw(`
+	// 	SELECT * FROM bookings WHERE property_id = @propertyID
+	// 	AND @checkinDate BETWEEN checkin_date AND checkout_date
+	// 	OR @checkoutDate BETWEEN checkin_date AND checkout_date;
+	// `, sql.Named("propertyID", propertyId), sql.Named("checkinDate", checkinDate), sql.Named("checkoutDate", checkoutData)).Find(&properties)
+
+	fmt.Println("\n\n query ", queryBuilder)
+
+	tx := repo.db.Raw(queryBuilder).Find(&properties)
+
+	if tx.Error != nil {
+		return "Not Available", tx.Error
+	}
+
+	affectedRow := tx.RowsAffected
+	fmt.Println("\n\nHasil check availbility, \n Checkin date = ", checkinDate, " \n Checkout date = ", checkoutData, " \n Hasil Row = ", affectedRow)
+
+	if affectedRow == 0 {
+		return "Available", nil
+	}
+
+	return "Not Available", nil
 }

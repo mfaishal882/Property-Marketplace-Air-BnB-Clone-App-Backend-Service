@@ -110,3 +110,14 @@ func (repo *userRepository) FindUser(email string) (result user.Core, err error)
 
 	return result, nil
 }
+
+// GetProperties implements user.RepositoryInterface
+func (repo *userRepository) GetProperties(id int) (data []user.Property, err error) {
+	var properties []Property
+	tx := repo.db.Where("user_id = ?", id).Find(&properties)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toPropertiesList(properties)
+	return dataCore, nil
+}

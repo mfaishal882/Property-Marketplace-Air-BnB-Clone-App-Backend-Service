@@ -108,3 +108,29 @@ func toCoreList(dataModel []User) []_user.Core {
 	}
 	return dataCore
 }
+
+func (dataModel *Property) toCoreProperties() _user.Property {
+	return _user.Property{
+		ID:                dataModel.ID,
+		PropertyName:      dataModel.PropertyName,
+		PricePerNight:     dataModel.PricePerNight,
+		Description:       dataModel.Address,
+		Address:           dataModel.Address,
+		City:              dataModel.City,
+		ContactNumber:     dataModel.ContactNumber,
+		Facilities:        dataModel.Facilities,
+		PropertyType:      dataModel.PropertyType,
+		RatingAverage:     dataModel.RatingAverage,
+		ImageThumbnailUrl: dataModel.ImageThumbnailUrl,
+		CreatedAt:         dataModel.CreatedAt,
+		UpdatedAt:         dataModel.UpdatedAt,
+	}
+}
+
+func toPropertiesList(dataModel []Property) []_user.Property {
+	var dataCore []_user.Property
+	for _, v := range dataModel {
+		dataCore = append(dataCore, v.toCoreProperties())
+	}
+	return dataCore
+}

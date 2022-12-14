@@ -26,7 +26,9 @@ func New(repo booking.RepositoryInterface) booking.ServiceInterface {
 // Create implements booking.ServiceInterface
 func (service *bookingService) Create(input booking.Core, c echo.Context) error {
 	id := middlewares.ExtractTokenUserId(c)
+	userName := middlewares.ExtractTokenUserName(c)
 	input.UserID = uint(id)
+	input.User.FullName = userName
 
 	errCreate := service.bookingRepository.Create(input)
 	if errCreate != nil {

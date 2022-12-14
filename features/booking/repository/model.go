@@ -14,6 +14,8 @@ type Booking struct {
 	PricePerNight float64
 	GrossAmount   float64
 	BookingStatus string
+	User          User
+	Property      Property
 	UserID        uint
 	PropertyID    uint
 }
@@ -56,7 +58,6 @@ func fromCore(dataCore booking.Core) Booking {
 		GrossAmount:   dataCore.GrossAmount,
 		BookingStatus: dataCore.BookingStatus,
 		UserID:        dataCore.UserID,
-		PropertyID:    dataCore.PropertyID,
 	}
 	return modelData
 }
@@ -71,9 +72,18 @@ func (dataModel *Booking) toCore() booking.Core {
 		GrossAmount:   dataModel.GrossAmount,
 		BookingStatus: dataModel.BookingStatus,
 		UserID:        dataModel.UserID,
-		PropertyID:    dataModel.PropertyID,
-		CreatedAt:     dataModel.CreatedAt,
-		UpdatedAt:     dataModel.UpdatedAt,
+		User: booking.User{
+			ID:       dataModel.User.ID,
+			FullName: dataModel.User.FullName,
+		},
+		Property: booking.Property{
+			ID:            dataModel.Property.ID,
+			PropertyName:  dataModel.Property.PropertyName,
+			PricePerNight: dataModel.Property.PricePerNight,
+		},
+		PropertyID: dataModel.PropertyID,
+		CreatedAt:  dataModel.CreatedAt,
+		UpdatedAt:  dataModel.UpdatedAt,
 	}
 }
 

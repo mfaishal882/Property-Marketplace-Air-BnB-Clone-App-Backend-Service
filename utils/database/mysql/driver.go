@@ -27,4 +27,5 @@ func migrateDB(db *gorm.DB) {
 	db.AutoMigrate(&user.PropertyImage{})
 	db.AutoMigrate(&user.Property{})
 	db.AutoMigrate(&user.Comment{})
+	db.AutoMigrate(&user.Booking{})
 }

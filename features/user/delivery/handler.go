@@ -6,6 +6,7 @@ import (
 	"api-airbnb-alta/utils/helper"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -36,7 +37,9 @@ func (delivery *UserDelivery) GetAll(c echo.Context) error {
 	helper.LogDebug("isi query = ", query)
 	results, err := delivery.userService.GetAll(query)
 	if err != nil {
-
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
@@ -53,6 +56,9 @@ func (delivery *UserDelivery) GetById(c echo.Context) error {
 	}
 	results, err := delivery.userService.GetById(id)
 	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
@@ -120,6 +126,9 @@ func (delivery *UserDelivery) GetProperties(c echo.Context) error {
 	}
 	results, err := delivery.userService.GetProperties(id)
 	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 

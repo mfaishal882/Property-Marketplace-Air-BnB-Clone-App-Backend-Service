@@ -62,6 +62,12 @@ func (service *commentService) GetById(id int) (data comment.Core, err error) {
 		log.Error(err.Error())
 		return comment.Core{}, helper.ServiceErrorMsg(err)
 	}
+
+	if data == (comment.Core{}) {
+		helper.LogDebug("Get data success. No data.")
+		return comment.Core{}, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 
 }

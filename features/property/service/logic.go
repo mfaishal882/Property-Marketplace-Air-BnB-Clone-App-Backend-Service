@@ -6,6 +6,7 @@ import (
 	"api-airbnb-alta/utils/helper"
 	"api-airbnb-alta/utils/thirdparty"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -62,6 +63,14 @@ func (service *propertyService) GetAll(queryName, queryCity, queryPropertyType s
 		helper.LogDebug(err)
 		return nil, helper.ServiceErrorMsg(err)
 	}
+
+	fmt.Println("Isi result get all property ,", data)
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
 	return data, nil
 }
 
@@ -72,6 +81,12 @@ func (service *propertyService) GetById(id int) (data property.Core, err error) 
 		log.Error(err.Error())
 		return property.Core{}, helper.ServiceErrorMsg(err)
 	}
+
+	if data == (property.Core{}) {
+		helper.LogDebug("Get data success. No data.")
+		return property.Core{}, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 }
 
@@ -103,6 +118,12 @@ func (service *propertyService) GetPropertyImages(id int) (data []property.Prope
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
 	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 }
 
@@ -113,6 +134,12 @@ func (service *propertyService) GetPropertyComments(id int) (data []property.Com
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
 	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 }
 

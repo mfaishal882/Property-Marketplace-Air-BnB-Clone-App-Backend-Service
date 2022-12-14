@@ -97,10 +97,10 @@ func (service *userService) GetAll(query string) (data []user.Core, err error) {
 		return nil, helper.ServiceErrorMsg(err)
 	}
 
-	// if len(data) == 0 {
-	// 	helper.LogDebug("Get data success. No data.")
-	// 	return nil, errors.New("Get data success. No data.")
-	// }
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
 
 	return data, err
 }
@@ -111,6 +111,12 @@ func (service *userService) GetById(id int) (data user.Core, err error) {
 		log.Error(err.Error())
 		return user.Core{}, helper.ServiceErrorMsg(err)
 	}
+
+	if (user.Core{}) == data {
+		helper.LogDebug("Get data success. No data.")
+		return user.Core{}, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 
 }
@@ -176,5 +182,11 @@ func (service *userService) GetProperties(id int) (data []user.Property, err err
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)
 	}
+
+	if len(data) == 0 {
+		helper.LogDebug("Get data success. No data.")
+		return nil, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 }

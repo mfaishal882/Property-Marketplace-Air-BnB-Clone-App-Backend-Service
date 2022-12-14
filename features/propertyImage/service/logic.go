@@ -78,6 +78,12 @@ func (service *propertyImageService) GetById(id int) (data propertyImage.Core, e
 		log.Error(err.Error())
 		return propertyImage.Core{}, helper.ServiceErrorMsg(err)
 	}
+
+	if data == (propertyImage.Core{}) {
+		helper.LogDebug("Get data success. No data.")
+		return propertyImage.Core{}, errors.New("Get data success. No data.")
+	}
+
 	return data, err
 
 }

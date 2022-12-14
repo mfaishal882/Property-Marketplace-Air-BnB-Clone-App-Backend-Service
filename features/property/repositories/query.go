@@ -74,6 +74,9 @@ func (repo *propertyRepository) GetAllWithSearch(queryPropertyName, queryCity, q
 		return nil, tx.Error
 	}
 	var dataCore = toCoreList(property)
+
+	fmt.Println("\n\n isi repo getallwith search ", property)
+	fmt.Println("\n\n isi repo getallwith search datacore ", dataCore)
 	return dataCore, nil
 }
 
@@ -86,6 +89,10 @@ func (repo *propertyRepository) GetAll() (data []property.Core, err error) {
 		return nil, tx.Error
 	}
 	var dataCore = toCoreList(properties)
+
+	fmt.Println("\n\n isi repo getall ", properties)
+	fmt.Println("\n\n isi repo getall datacore ", dataCore)
+
 	return dataCore, nil
 }
 

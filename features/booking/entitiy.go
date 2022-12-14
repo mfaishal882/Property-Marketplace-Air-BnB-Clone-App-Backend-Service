@@ -1,8 +1,6 @@
 package booking
 
 import (
-	"api-airbnb-alta/features/property"
-	"api-airbnb-alta/features/user"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -17,12 +15,22 @@ type Core struct {
 	BookingStatus string
 	UserID        uint
 	PropertyID    uint
-	User          user.Core
-	Property      property.Core
+	User          User
+	Property      Property
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 }
 
+type User struct {
+	ID       uint
+	FullName string
+}
+
+type Property struct {
+	ID            uint
+	PropertyName  string
+	PricePerNight float64
+}
 type ServiceInterface interface {
 	GetAll() (data []Core, err error)
 	Create(input Core, c echo.Context) error

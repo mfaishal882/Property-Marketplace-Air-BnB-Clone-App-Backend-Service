@@ -40,7 +40,7 @@ func (repo *bookingRepository) Create(input booking.Core) error {
 		return errors.New("insert failed")
 	}
 
-	//  menncari jumlah hari
+	//  mencari jumlah hari
 	// tx2 := repo.db.Raw("SELECT DATEDIFF(checkout_date, checkin_date) from bookings where id = (select max(id) from bookings)")
 	// if tx2.Error != nil {
 	// 	return tx.Error

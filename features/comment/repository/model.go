@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-//struct gorm model
+// struct gorm model
 type Comment struct {
 	gorm.Model
 	Title      string
@@ -16,10 +16,25 @@ type Comment struct {
 	PropertyID uint
 }
 
+type Property struct {
+	gorm.Model
+	PropertyName      string
+	PricePerNight     int
+	Description       string
+	Address           string
+	City              string
+	ContactNumber     string
+	Facilities        string
+	PropertyType      string
+	RatingAverage     float64
+	ImageThumbnailUrl string
+	UserID            uint
+}
+
 // DTO
 // mapping
 
-//mengubah struct core ke struct model gorm
+// mengubah struct core ke struct model gorm
 func fromCore(dataCore _comment.Core) Comment {
 	modelData := Comment{
 		Title:      dataCore.Title,
@@ -31,7 +46,7 @@ func fromCore(dataCore _comment.Core) Comment {
 	return modelData
 }
 
-//mengubah struct model gorm ke struct core
+// mengubah struct model gorm ke struct core
 func (dataModel *Comment) toCore() _comment.Core {
 	return _comment.Core{
 		ID:         dataModel.ID,
@@ -45,7 +60,7 @@ func (dataModel *Comment) toCore() _comment.Core {
 	}
 }
 
-//mengubah slice struct model gorm ke slice struct core
+// mengubah slice struct model gorm ke slice struct core
 func toCoreList(dataModel []Comment) []_comment.Core {
 	var dataCore []_comment.Core
 	for _, v := range dataModel {

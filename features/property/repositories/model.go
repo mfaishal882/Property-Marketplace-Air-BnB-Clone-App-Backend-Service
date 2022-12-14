@@ -21,6 +21,7 @@ type Property struct {
 	UserID            uint
 	User              User
 	PropertyImages    []PropertyImage
+	Comments          []Comment
 }
 
 type User struct {
@@ -33,6 +34,7 @@ type User struct {
 	ProfileImageUrl string
 	IsHosting       string
 	Properties      []Property
+	Comments        []Comment
 }
 
 type PropertyImage struct {
@@ -40,6 +42,15 @@ type PropertyImage struct {
 	Title      string
 	ImageUrl   string `valiidate:"required"`
 	PropertyID uint   `valiidate:"required"`
+}
+
+type Comment struct {
+	gorm.Model
+	Title      string
+	Comment    string
+	Rating     float64
+	UserID     uint
+	PropertyID uint
 }
 
 func fromCore(dataCore _property.Core) Property {
@@ -102,6 +113,27 @@ func toPropertyImagesList(dataModel []PropertyImage) []_property.PropertyImage {
 	var dataCore []_property.PropertyImage
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCorePropertyImage())
+	}
+	return dataCore
+}
+
+func (dataModel *Comment) toCorePropertyComment() _property.Comment {
+	return _property.Comment{
+		ID:         dataModel.ID,
+		Title:      dataModel.Title,
+		Comment:    dataModel.Comment,
+		Rating:     dataModel.Rating,
+		UserID:     dataModel.UserID,
+		PropertyID: dataModel.PropertyID,
+		CreatedAt:  dataModel.CreatedAt,
+		UpdatedAt:  dataModel.UpdatedAt,
+	}
+}
+
+func toPropertyCommentList(dataModel []Comment) []_property.Comment {
+	var dataCore []_property.Comment
+	for _, v := range dataModel {
+		dataCore = append(dataCore, v.toCorePropertyComment())
 	}
 	return dataCore
 }

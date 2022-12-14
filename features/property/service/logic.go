@@ -106,6 +106,11 @@ func (service *propertyService) GetPropertyImages(id int) (data []property.Prope
 }
 
 // GetPropertyComments implements property.ServiceInterface
-func (*propertyService) GetPropertyComments(id int) (data []property.PropertyImage, err error) {
-	panic("unimplemented")
+func (service *propertyService) GetPropertyComments(id int) (data []property.Comment, err error) {
+	data, err = service.propertyRepository.GetPropertyComments(id)
+	if err != nil {
+		log.Error(err.Error())
+		return data, helper.ServiceErrorMsg(err)
+	}
+	return data, err
 }

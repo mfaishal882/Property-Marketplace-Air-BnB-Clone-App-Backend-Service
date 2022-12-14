@@ -58,6 +58,7 @@ func fromCore(dataCore booking.Core) Booking {
 		GrossAmount:   dataCore.GrossAmount,
 		BookingStatus: dataCore.BookingStatus,
 		UserID:        dataCore.UserID,
+		PropertyID:    dataCore.PropertyID,
 	}
 	return modelData
 }
@@ -77,9 +78,8 @@ func (dataModel *Booking) toCore() booking.Core {
 			FullName: dataModel.User.FullName,
 		},
 		Property: booking.Property{
-			ID:            dataModel.Property.ID,
-			PropertyName:  dataModel.Property.PropertyName,
-			PricePerNight: dataModel.Property.PricePerNight,
+			ID:           dataModel.Property.ID,
+			PropertyName: dataModel.Property.PropertyName,
 		},
 		PropertyID: dataModel.PropertyID,
 		CreatedAt:  dataModel.CreatedAt,

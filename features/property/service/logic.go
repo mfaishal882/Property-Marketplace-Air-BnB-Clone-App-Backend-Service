@@ -118,6 +118,12 @@ func (service *propertyService) GetPropertyComments(id int) (data []property.Com
 
 // GetAvailbility implements property.ServiceInterface
 func (service *propertyService) GetAvailbility(id uint, checkinDate time.Time, checkoutDate time.Time) (result string, err error) {
+
+	if checkinDate.After(checkoutDate) || checkinDate.Equal(checkoutDate) {
+		log.Error("Check In Date must before Checkout Date.")
+		return result, errors.New("Check In Date must before Checkout Date.")
+	}
+
 	result, err = service.propertyRepository.GetAvailability(id, checkinDate, checkoutDate)
 	if err != nil {
 		log.Error(err.Error())

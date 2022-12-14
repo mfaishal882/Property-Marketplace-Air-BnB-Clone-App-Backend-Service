@@ -19,6 +19,7 @@ type User struct {
 	IsHosting       string
 	Propertys       []Property
 	Comments        []Comment
+	Booking         []Booking
 }
 
 type PropertyImage struct {
@@ -43,6 +44,7 @@ type Property struct {
 	UserID            uint
 	PropertyImages    []PropertyImage
 	Comments          []Comment
+	Bookings          []Booking
 }
 
 type Comment struct {

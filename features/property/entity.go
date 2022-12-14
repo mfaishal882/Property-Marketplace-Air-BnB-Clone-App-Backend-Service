@@ -34,6 +34,17 @@ type PropertyImage struct {
 	UpdatedAt  time.Time
 }
 
+type Comment struct {
+	ID         uint
+	Title      string
+	Comment    string
+	Rating     float64
+	UserID     uint
+	PropertyID uint
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
 type ServiceInterface interface {
 	GetAll(queryName, queryCity, queryPropertyType string) (data []Core, err error)
 	Create(input Core, c echo.Context) error
@@ -41,7 +52,7 @@ type ServiceInterface interface {
 	Update(input Core, id int) error
 	Delete(id int) error
 	GetPropertyImages(id int) (data []PropertyImage, err error)
-	GetPropertyComments(id int) (data []PropertyImage, err error)
+	GetPropertyComments(id int) (data []Comment, err error)
 }
 
 type RepositoryInterface interface {
@@ -52,5 +63,5 @@ type RepositoryInterface interface {
 	Update(input Core, id int) error
 	Delete(id int) error
 	GetPropertyImages(id int) (data []PropertyImage, err error)
-	GetPropertyComments(id int) (data []PropertyImage, err error)
+	GetPropertyComments(id int) (data []Comment, err error)
 }

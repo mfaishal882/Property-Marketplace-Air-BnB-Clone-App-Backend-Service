@@ -73,6 +73,7 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 
 	input.Password = string(bytePass)
 
+	input.IsHosting = "No"
 	errCreate := service.userRepository.Create(input)
 	if errCreate != nil {
 		log.Error(errCreate.Error())

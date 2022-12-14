@@ -2,6 +2,7 @@ package repository
 
 import (
 	_user "api-airbnb-alta/features/user"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -51,6 +52,17 @@ type Comment struct {
 	Rating     float64
 	UserID     uint
 	PropertyID uint
+}
+
+type Booking struct {
+	gorm.Model
+	CheckinDate   time.Time
+	CheckoutDate  time.Time
+	PricePerNight float64
+	GrossAmount   float64
+	BookingStatus string
+	UserID        uint
+	PropertyID    uint
 }
 
 // DTO

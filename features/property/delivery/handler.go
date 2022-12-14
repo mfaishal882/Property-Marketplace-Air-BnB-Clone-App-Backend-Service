@@ -145,12 +145,12 @@ func (delivery *PropertyDelivery) GetPropertyComments(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
-	results, err := delivery.propertyService.GetPropertyImages(id)
+	results, err := delivery.propertyService.GetPropertyComments(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
-	dataResponse := fromPropertyImagesList(results)
+	dataResponse := fromPropertyCommentList(results)
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
 }

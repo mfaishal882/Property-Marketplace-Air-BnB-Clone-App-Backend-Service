@@ -36,6 +36,15 @@ type PropertyImagesResponse struct {
 	PropertyID uint   `json:"properties_id" form:"properties_id"`
 }
 
+type PropertyCommentResponse struct {
+	ID         uint    `json:"id"`
+	Title      string  `json:"title" form:"title"`
+	Comment    string  `json:"comment" form:"comment"`
+	Rating     float64 `json:"rating" form:"rating"`
+	UserID     uint    `json:"user_id" form:"user_id"`
+	PropertyID uint    `json:"properties_id" form:"properties_id"`
+}
+
 func fromCore(dataCore property.Core) PropertyResponseGetAll {
 	return PropertyResponseGetAll{
 		ID:                dataCore.ID,
@@ -86,6 +95,25 @@ func fromPropertyImagesList(dataCore []property.PropertyImage) []PropertyImagesR
 	var dataResponse []PropertyImagesResponse
 	for _, v := range dataCore {
 		dataResponse = append(dataResponse, fromPropertyImages(v))
+	}
+	return dataResponse
+}
+
+func fromPropertyComment(dataCore property.Comment) PropertyCommentResponse {
+	return PropertyCommentResponse{
+		ID:         dataCore.ID,
+		Title:      dataCore.Title,
+		Comment:    dataCore.Comment,
+		Rating:     dataCore.Rating,
+		UserID:     dataCore.UserID,
+		PropertyID: dataCore.PropertyID,
+	}
+}
+
+func fromPropertyCommentList(dataCore []property.Comment) []PropertyCommentResponse {
+	var dataResponse []PropertyCommentResponse
+	for _, v := range dataCore {
+		dataResponse = append(dataResponse, fromPropertyComment(v))
 	}
 	return dataResponse
 }

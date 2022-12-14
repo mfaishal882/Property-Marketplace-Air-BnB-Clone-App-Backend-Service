@@ -29,7 +29,7 @@ func (repo *propertyRepository) Create(input property.Core) error {
 		return errors.New("insert failed")
 	}
 
-	tx2 := repo.db.Model(&user).Where("id = ?", input.UserID).Update("isHosting", "Yes")
+	tx2 := repo.db.Model(&user).Where("id = ?", input.UserID).Update("is_hosting", "Yes")
 	if tx2.Error != nil {
 		return tx.Error
 	}
@@ -117,6 +117,12 @@ func (repo *propertyRepository) GetPropertyImages(id int) (data []property.Prope
 }
 
 // GetPropertyComments implements property.RepositoryInterface
-func (*propertyRepository) GetPropertyComments(id int) (data []property.PropertyImage, err error) {
-	panic("unimplemented")
+func (repo *propertyRepository) GetPropertyComments(id int) (data []property.Comment, err error) {
+	var comments []Comment
+	tx := repo.db.Where("property_id = ?", id).Find(&comments)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	var dataCore = toPropertyCommentList(comments)
+	return dataCore, nil
 }

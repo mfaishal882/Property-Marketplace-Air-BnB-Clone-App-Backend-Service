@@ -4,8 +4,10 @@ import (
 	property "api-airbnb-alta/features/property"
 	"api-airbnb-alta/middlewares"
 	"api-airbnb-alta/utils/helper"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -157,16 +159,39 @@ func (delivery *PropertyDelivery) GetPropertyComments(c echo.Context) error {
 
 func (delivery *PropertyDelivery) GetAvailability(c echo.Context) error {
 	idParam := c.Param("id")
+	checkinDate := c.QueryParam("checkin_date")
+	checkoutDate := c.QueryParam("checkout_date")
 	id, errConv := strconv.Atoi(idParam)
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
-	results, err := delivery.propertyService.GetPropertyImages(id)
+
+	var layout2 = "2006-01-02"
+	checkinDateTime, errParse1 := time.Parse(layout2, checkinDate)
+	checkoutDateTime, errParse2 := time.Parse(layout2, checkoutDate)
+
+	if errParse1 != nil || errParse2 != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error Parse "+errParse1.Error()+" dan "+errParse2.Error()))
+	}
+
+	results, err := delivery.propertyService.GetAvailbility(uint(id), checkinDateTime, checkoutDateTime)
+
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
 	}
 
-	dataResponse := fromPropertyImagesList(results)
+	propertyData, errGetData := delivery.propertyService.GetById(id)
+
+	fmt.Println("\n\n\n\n Hasil Checkin date", checkinDateTime)
+	fmt.Println("\nHasil Checkout date", checkoutDateTime)
+	fmt.Println("\nHasil result avail", results)
+	fmt.Println("\nGet property by id", propertyData)
+
+	if errGetData != nil {
+		return c.JSON(http.StatusInternalServerError, helper.FailedResponse(err.Error()))
+	}
+
+	dataResponse := fromCoreCheckAvailbility(propertyData, checkinDate, checkoutDate, results)
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
 }

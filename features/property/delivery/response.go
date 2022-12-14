@@ -45,6 +45,14 @@ type PropertyCommentResponse struct {
 	PropertyID uint    `json:"properties_id" form:"properties_id"`
 }
 
+type PropertyResponseCheckAvailbility struct {
+	PropertyID    uint   `json:"property_id"`
+	PropertyName  string `json:"property_name"`
+	CheckinDate   string `json:"checkin_date"`
+	CheckoutDate  string `json:"checkout_date"`
+	BookingStatus string `json:"booking_status"`
+}
+
 func fromCore(dataCore property.Core) PropertyResponseGetAll {
 	return PropertyResponseGetAll{
 		ID:                dataCore.ID,
@@ -116,4 +124,14 @@ func fromPropertyCommentList(dataCore []property.Comment) []PropertyCommentRespo
 		dataResponse = append(dataResponse, fromPropertyComment(v))
 	}
 	return dataResponse
+}
+
+func fromCoreCheckAvailbility(dataCore property.Core, checkinDate string, checkoutDate string, bookingStatus string) PropertyResponseCheckAvailbility {
+	return PropertyResponseCheckAvailbility{
+		PropertyID:    dataCore.ID,
+		PropertyName:  dataCore.PropertyName,
+		CheckinDate:   checkinDate,
+		CheckoutDate:  checkoutDate,
+		BookingStatus: bookingStatus,
+	}
 }

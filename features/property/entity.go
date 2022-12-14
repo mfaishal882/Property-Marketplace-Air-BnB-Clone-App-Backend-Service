@@ -53,6 +53,7 @@ type ServiceInterface interface {
 	Delete(id int) error
 	GetPropertyImages(id int) (data []PropertyImage, err error)
 	GetPropertyComments(id int) (data []Comment, err error)
+	GetAvailbility(id uint, checkinDate time.Time, checkoutDate time.Time) (result string, err error)
 }
 
 type RepositoryInterface interface {
@@ -64,4 +65,5 @@ type RepositoryInterface interface {
 	Delete(id int) error
 	GetPropertyImages(id int) (data []PropertyImage, err error)
 	GetPropertyComments(id int) (data []Comment, err error)
+	GetAvailability(propertyId uint, checkinDate time.Time, checkoutData time.Time) (result string, err error)
 }

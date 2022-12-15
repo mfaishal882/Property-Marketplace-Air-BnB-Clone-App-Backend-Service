@@ -9,7 +9,7 @@ import (
 type Core struct {
 	ID              uint
 	FullName        string `validate:"required"`
-	Email           string `validate:"required,email,unique"`
+	Email           string `validate:"required,email"`
 	Password        string `validate:"required"`
 	Phone           string `validate:"required"`
 	Gender          string

@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-//struct gorm model
+// struct gorm model
 type PropertyImage struct {
 	gorm.Model
 	Title      string
@@ -33,7 +33,7 @@ type Property struct {
 // DTO
 // mapping
 
-//mengubah struct core ke struct model gorm
+// mengubah struct core ke struct model gorm
 func fromCore(dataCore _propertyImage.Core) PropertyImage {
 	modelData := PropertyImage{
 		Title:      dataCore.Title,
@@ -43,7 +43,7 @@ func fromCore(dataCore _propertyImage.Core) PropertyImage {
 	return modelData
 }
 
-//mengubah struct model gorm ke struct core
+// mengubah struct model gorm ke struct core
 func (dataModel *PropertyImage) toCore() _propertyImage.Core {
 	return _propertyImage.Core{
 		ID:         dataModel.ID,
@@ -55,11 +55,30 @@ func (dataModel *PropertyImage) toCore() _propertyImage.Core {
 	}
 }
 
-//mengubah slice struct model gorm ke slice struct core
+// mengubah slice struct model gorm ke slice struct core
 func toCoreList(dataModel []PropertyImage) []_propertyImage.Core {
 	var dataCore []_propertyImage.Core
 	for _, v := range dataModel {
 		dataCore = append(dataCore, v.toCore())
 	}
 	return dataCore
+}
+
+func (dataModel *Property) toCoreProperty() _propertyImage.Property {
+	return _propertyImage.Property{
+		ID:                dataModel.ID,
+		PropertyName:      dataModel.PropertyName,
+		PricePerNight:     dataModel.PricePerNight,
+		Description:       dataModel.Description,
+		Address:           dataModel.Address,
+		City:              dataModel.City,
+		ContactNumber:     dataModel.ContactNumber,
+		Facilities:        dataModel.Facilities,
+		PropertyType:      dataModel.PropertyType,
+		RatingAverage:     dataModel.RatingAverage,
+		ImageThumbnailUrl: dataModel.ImageThumbnailUrl,
+		UserID:            dataModel.UserID,
+		CreatedAt:         dataModel.CreatedAt,
+		UpdatedAt:         dataModel.UpdatedAt,
+	}
 }

@@ -110,3 +110,21 @@ func (repo *propertyImageRepository) FindUser(email string) (result propertyImag
 
 	return result, nil
 }
+
+// GetPropertyById implements propertyImage.RepositoryInterface
+func (repo *propertyImageRepository) GetPropertyById(id int) (data propertyImage.Property, err error) {
+	var result Property
+
+	tx := repo.db.First(&result, id)
+
+	if tx.Error != nil {
+		return data, tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return data, tx.Error
+	}
+
+	var dataCore = result.toCoreProperty()
+	return dataCore, nil
+}

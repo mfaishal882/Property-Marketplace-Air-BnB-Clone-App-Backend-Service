@@ -4,6 +4,7 @@ import (
 	"api-airbnb-alta/features/propertyImage"
 	"api-airbnb-alta/middlewares"
 	"api-airbnb-alta/utils/helper"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -94,6 +95,28 @@ func (delivery *PropertyImageDelivery) Update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data. "+errBind.Error()))
 	}
 
+	// validasi data di proses oleh user ybs
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	propertyImageData, errGet := delivery.propertyImageService.GetById(id)
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	propertyData, errGet := delivery.propertyImageService.GetPropertyById(int(propertyImageData.PropertyID))
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	fmt.Println("\n\nProp image data = ", propertyImageData)
+	fmt.Println("\n\nid = ", userId, " = prop user id =", propertyData.UserID)
+
+	if userId != int(propertyData.UserID) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
 	dataCore := toCore(userInput)
 	err := delivery.propertyImageService.Update(dataCore, id, c)
 	if err != nil {
@@ -109,6 +132,29 @@ func (delivery *PropertyImageDelivery) Delete(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
+
+	// validasi data di proses oleh user ybs
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	propertyImageData, errGet := delivery.propertyImageService.GetById(id)
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	propertyData, errGet := delivery.propertyImageService.GetPropertyById(int(propertyImageData.PropertyID))
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	fmt.Println("\n\nProp image data = ", propertyImageData)
+	fmt.Println("\n\nid = ", userId, " = prop user id =", propertyData.UserID)
+
+	if userId != int(propertyData.UserID) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
 	err := delivery.propertyImageService.Delete(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))

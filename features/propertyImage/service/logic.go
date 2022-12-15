@@ -138,3 +138,19 @@ func (service *propertyImageService) Delete(id int) error {
 	}
 	return nil
 }
+
+// GetPropertyById implements propertyImage.ServiceInterface
+func (service *propertyImageService) GetPropertyById(id int) (data propertyImage.Property, err error) {
+	data, err = service.propertyImageRepository.GetPropertyById(id)
+	if err != nil {
+		log.Error(err.Error())
+		return propertyImage.Property{}, helper.ServiceErrorMsg(err)
+	}
+
+	if data == (propertyImage.Property{}) {
+		helper.LogDebug("Get data success. No data.")
+		return propertyImage.Property{}, errors.New("Get data success. No data.")
+	}
+
+	return data, err
+}

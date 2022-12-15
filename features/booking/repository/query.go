@@ -45,7 +45,7 @@ func (repo *bookingRepository) Create(input booking.Core) error {
 		return errors.New("failed create data")
 	}
 
-	ta := repo.db.Exec("UPDATE bookings SET gross_amount = (SELECT DATEDIFF(checkin_date, checkout_date) *price_per_night) WHERE id = ?", id)
+	ta := repo.db.Exec("UPDATE bookings SET gross_amount = (SELECT DATEDIFF(checkout_date, checkin_date) *price_per_night) WHERE id = ?", id)
 	if ta.Error != nil {
 		return errors.New("failed create data")
 	}

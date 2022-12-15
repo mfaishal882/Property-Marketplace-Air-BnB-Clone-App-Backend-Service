@@ -28,11 +28,6 @@ func New(repo user.RepositoryInterface) user.ServiceInterface {
 
 // Create implements user.ServiceInterface
 func (service *userService) Create(input user.Core, c echo.Context) (err error) {
-	//validate
-	// if input.Name == "" || input.Email == "" || input.Password == "" {
-	// 	return errors.New("Name, email, password harus diisi")
-	// }
-
 	// validasi input
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
@@ -41,8 +36,8 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 	// validasi email harus unik
 	data, errFindEmail := service.userRepository.FindUser(input.Email)
 
-	helper.LogDebug("\n\n\n find email input  ", input.Email)
-	helper.LogDebug("\n\n\n find email data  ", data.Email)
+	// helper.LogDebug("\n\n\n find email input  ", input.Email)
+	// helper.LogDebug("\n\n\n find email data  ", data.Email)
 
 	if data.Email == input.Email {
 		return errors.New("Failed. Email " + input.Email + " already exist. Please pick another email.")
@@ -122,6 +117,11 @@ func (service *userService) GetById(id int) (data user.Core, err error) {
 }
 
 func (service *userService) Update(input user.Core, id int) error {
+	// validasi input
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
+
 	if input.Password != "" {
 		generate, _ := bcrypt.GenerateFromPassword([]byte(input.Password), 10)
 		input.Password = string(generate)

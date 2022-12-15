@@ -23,7 +23,6 @@ func New(repo comment.RepositoryInterface) comment.ServiceInterface {
 }
 
 func (service *commentService) Create(input comment.Core, c echo.Context) (err error) {
-
 	// validasi input
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
@@ -73,6 +72,10 @@ func (service *commentService) GetById(id int) (data comment.Core, err error) {
 }
 
 func (service *commentService) Update(input comment.Core, id int, c echo.Context) error {
+	// validasi input
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
 
 	// validasi user dgn id path param, apakah ada datanya di database
 	_, errFindId := service.comentRepository.GetById(id)

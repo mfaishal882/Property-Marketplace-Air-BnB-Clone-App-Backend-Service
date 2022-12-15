@@ -90,6 +90,11 @@ func (service *propertyImageService) GetById(id int) (data propertyImage.Core, e
 
 func (service *propertyImageService) Update(input propertyImage.Core, id int, c echo.Context) error {
 
+	// validasi input
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
+
 	// validasi user dgn id path param, apakah ada datanya di database
 	_, errFindId := service.propertyImageRepository.GetById(id)
 	if errFindId != nil {

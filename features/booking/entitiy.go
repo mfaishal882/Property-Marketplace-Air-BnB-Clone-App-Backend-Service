@@ -8,13 +8,13 @@ import (
 
 type Core struct {
 	ID            uint
-	CheckinDate   time.Time
-	CheckoutDate  time.Time
+	CheckinDate   time.Time `validate:"required"`
+	CheckoutDate  time.Time `validate:"required"`
 	PricePerNight float64
 	GrossAmount   float64
 	BookingStatus string
 	UserID        uint
-	PropertyID    uint
+	PropertyID    uint `validate:"required"`
 	User          User
 	Property      Property
 	CreatedAt     time.Time

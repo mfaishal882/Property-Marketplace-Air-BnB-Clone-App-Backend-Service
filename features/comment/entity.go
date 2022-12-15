@@ -11,8 +11,8 @@ type Core struct {
 	Title      string  `valiidate:"required"`
 	Comment    string  `valiidate:"required"`
 	Rating     float64 `valiidate:"required"`
-	UserID     uint
-	PropertyID uint
+	UserID     uint    `valiidate:"required"`
+	PropertyID uint    `valiidate:"required"`
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

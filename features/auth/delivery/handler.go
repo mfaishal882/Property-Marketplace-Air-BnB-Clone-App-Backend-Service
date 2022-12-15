@@ -4,6 +4,7 @@ import (
 	"api-airbnb-alta/features/auth"
 	"api-airbnb-alta/utils/helper"
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -23,9 +24,6 @@ func (handler *AuthHandler) Login(c echo.Context) error {
 	userInput := UserRequest{}
 	errBind := c.Bind(&userInput)
 	if errBind != nil {
-		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-		// 	"message": "failed to get bind data",
-		// })
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("failed to bind data"))
 	}
 
@@ -33,15 +31,11 @@ func (handler *AuthHandler) Login(c echo.Context) error {
 	result, token, err := handler.authService.Login(dataCore)
 
 	if err != nil {
-		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-		// 	"message": "failed to get token data" + err.Error(),
-		// })
+		if strings.Contains(err.Error(), "Error:Field validation") {
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))
+		}
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to Login. "+err.Error()))
 	}
-	// return c.JSON(http.StatusOK, map[string]interface{}{
-	// 	"message": "success",
-	// 	"name":    name,
-	// 	"token":   result,
-	// })
+
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Login Success.", FromCore(result, token)))
 }

@@ -6,7 +6,6 @@ import (
 	"api-airbnb-alta/utils/helper"
 	"api-airbnb-alta/utils/thirdparty"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -28,9 +27,16 @@ func New(repo property.RepositoryInterface) property.ServiceInterface {
 
 // Create implements properties.ServiceInterface
 func (service *propertyService) Create(input property.Core, c echo.Context) error {
+	// validasi input
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
+
 	id := middlewares.ExtractTokenUserId(c)
 	input.UserID = uint(id)
 	input.RatingAverage = 0
+
+	// upload
 	file, _ := c.FormFile("file")
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c)
@@ -64,7 +70,7 @@ func (service *propertyService) GetAll(queryName, queryCity, queryPropertyType s
 		return nil, helper.ServiceErrorMsg(err)
 	}
 
-	fmt.Println("Isi result get all property ,", data)
+	// fmt.Println("Isi result get all property ,", data)
 
 	if len(data) == 0 {
 		helper.LogDebug("Get data success. No data.")
@@ -101,7 +107,25 @@ func (service *propertyService) Delete(id int) error {
 }
 
 // Update implements property.ServiceInterface
-func (service *propertyService) Update(input property.Core, id int) error {
+func (service *propertyService) Update(input property.Core, id int, c echo.Context) error {
+	// validasi input
+	if errValidate := service.validate.Struct(input); errValidate != nil {
+		return errValidate
+	}
+
+	// upload
+	file, _ := c.FormFile("file")
+	if file != nil {
+		res, err := thirdparty.UploadProfile(c)
+		if err != nil {
+			return errors.New("registration failed. cannot upload data")
+		}
+		log.Print(res)
+		input.ImageThumbnailUrl = res
+	} else {
+		input.ImageThumbnailUrl = "https://thumbs.dreamstime.com/b/house-vector-icon-home-logo-isolated-white-background-house-vector-icon-home-logo-vector-illustration-138343234.jpg"
+	}
+
 	err := service.propertyRepository.Update(input, id)
 	if err != nil {
 		log.Error(err.Error())

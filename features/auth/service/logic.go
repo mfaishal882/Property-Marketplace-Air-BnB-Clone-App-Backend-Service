@@ -28,7 +28,7 @@ func (service *authService) Login(dataCore auth.Core) (auth.Core, string, error)
 
 	if errValidate := service.validate.Struct(dataCore); errValidate != nil {
 		log.Error(errValidate.Error())
-		return auth.Core{}, "", errors.New("failed to login, error validate input, please check your input")
+		return auth.Core{}, "", errors.New("Failed to login, error validate input, please check your input")
 	}
 
 	result, errLogin := service.authData.FindUser(dataCore.Email)

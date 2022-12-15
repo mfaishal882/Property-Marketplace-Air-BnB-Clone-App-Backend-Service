@@ -78,6 +78,7 @@ func UserOnlySameId(next echo.HandlerFunc) echo.HandlerFunc {
 		user := e.Get("user").(*jwt.Token)
 		if user.Valid {
 			claims := user.Claims.(jwt.MapClaims)
+
 			role := claims["role"].(string)
 
 			// jika role bukan user (super admin) skip fungsi ini

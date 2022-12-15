@@ -108,6 +108,23 @@ func (delivery *PropertyDelivery) Update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data. "+errBind.Error()))
 	}
 
+	// validasi data di proses oleh user ybs
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	propertyData, errGet := delivery.propertyService.GetById(id)
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	fmt.Println("\n\nProp data = ", propertyData)
+	fmt.Println("\n\nid = ", userId, " = prop user id =", propertyData.UserID)
+
+	if userId != int(propertyData.UserID) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
 	dataCore := toCore(propertyInput)
 	err := delivery.propertyService.Update(dataCore, id)
 	if err != nil {
@@ -123,6 +140,24 @@ func (delivery *PropertyDelivery) Delete(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
+
+	// validasi data di proses oleh user ybs
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	propertyData, errGet := delivery.propertyService.GetById(id)
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	fmt.Println("\n\nProp data = ", propertyData)
+	fmt.Println("\n\nid = ", userId, " = prop user id =", propertyData.UserID)
+
+	if userId != int(propertyData.UserID) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
 	err := delivery.propertyService.Delete(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))

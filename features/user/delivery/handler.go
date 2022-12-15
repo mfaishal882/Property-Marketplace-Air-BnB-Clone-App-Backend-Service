@@ -47,7 +47,7 @@ func (delivery *UserDelivery) GetAll(c echo.Context) error {
 
 	dataResponse := fromCoreList(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all users", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all data", dataResponse))
 }
 
 func (delivery *UserDelivery) GetMe(c echo.Context) error {
@@ -100,6 +100,9 @@ func (delivery *UserDelivery) Create(c echo.Context) error {
 		if strings.Contains(err.Error(), "Error:Field validation") {
 			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot empty. Details : "+err.Error()))
 		}
+		if strings.Contains(err.Error(), "Please pick another email.") {
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed insert data "+err.Error()))
+		}
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed insert data. "+err.Error()))
 	}
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Success create data"))
@@ -119,7 +122,7 @@ func (delivery *UserDelivery) Update(c echo.Context) error {
 	}
 
 	dataCore := toCore(userInput)
-	err := delivery.userService.Update(dataCore, id)
+	err := delivery.userService.Update(dataCore, id, c)
 	if err != nil {
 		if strings.Contains(err.Error(), "Error:Field validation") {
 			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))

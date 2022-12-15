@@ -40,7 +40,7 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 	// helper.LogDebug("\n\n\n find email data  ", data.Email)
 
 	if data.Email == input.Email {
-		return errors.New("Failed. Email " + input.Email + " already exist. Please pick another email.")
+		return errors.New("Email " + input.Email + " already exist. Please pick another email.")
 	}
 
 	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
@@ -52,7 +52,7 @@ func (service *userService) Create(input user.Core, c echo.Context) (err error) 
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c)
 		if err != nil {
-			return errors.New("Registration Failed. Cannot Upload Data.")
+			return errors.New("Failed. Cannot Upload Data.")
 		}
 		log.Print(res)
 		input.ProfileImageUrl = res
@@ -116,7 +116,7 @@ func (service *userService) GetById(id int) (data user.Core, err error) {
 
 }
 
-func (service *userService) Update(input user.Core, id int) error {
+func (service *userService) Update(input user.Core, id int, c echo.Context) error {
 	// validasi input
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
@@ -137,8 +137,8 @@ func (service *userService) Update(input user.Core, id int) error {
 	// validasi email harus unik pas update, kalau email nya sama dgn punya dia gpp
 	data, errFindEmail := service.userRepository.FindUser(input.Email)
 
-	helper.LogDebug("\n\n\n find email input  ", input.Email, "--- id ", id)
-	helper.LogDebug("\n\n\n find email data  ", data.Email, "--- id ", data.ID)
+	// helper.LogDebug("\n\n\n find email input  ", input.Email, "--- id ", id)
+	// helper.LogDebug("\n\n\n find email data  ", data.Email, "--- id ", data.ID)
 
 	if (data.Email == input.Email) && (data.ID != uint(id)) {
 		return errors.New("Failed. Email " + input.Email + " already exist at other user. Please pick another email.")
@@ -146,6 +146,19 @@ func (service *userService) Update(input user.Core, id int) error {
 
 	if errFindEmail != nil && !strings.Contains(errFindEmail.Error(), "found") {
 		return helper.ServiceErrorMsg(errFindEmail)
+	}
+
+	// upload foto
+	file, _ := c.FormFile("file")
+	if file != nil {
+		res, err := thirdparty.UploadProfile(c)
+		if err != nil {
+			return errors.New("Failed. Cannot Upload Data.")
+		}
+		log.Print(res)
+		input.ProfileImageUrl = res
+	} else {
+		input.ProfileImageUrl = "https://www.hostpapa.com/knowledgebase/wp-content/uploads/2018/04/1-13.png"
 	}
 
 	// proses

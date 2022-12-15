@@ -33,7 +33,12 @@ func (repo *commentRepository) Create(input comment.Core) error {
 	if tx1.Error != nil {
 		return tx1.Error
 	}
-	avg := (property.RatingAverage + input.Rating) / 2
+	var avg float64
+	if property.RatingAverage == 0 {
+		avg = input.Rating
+	} else {
+		avg = (property.RatingAverage + input.Rating) / 2
+	}
 	tx2 := repo.db.Model(&property).Where("id = ?", input.PropertyID).Update("rating_average", avg)
 	if tx2.Error != nil {
 		return tx.Error

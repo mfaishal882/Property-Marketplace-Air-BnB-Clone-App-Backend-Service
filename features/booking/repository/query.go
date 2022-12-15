@@ -86,10 +86,10 @@ func (repo *bookingRepository) Create(input booking.Core) error {
 }
 
 // GetAll implements booking.RepositoryInterface
-func (repo *bookingRepository) GetAll() (data []booking.Core, err error) {
+func (repo *bookingRepository) GetAll(userId int) (data []booking.Core, err error) {
 	var results []Booking
 
-	tx := repo.db.Preload("User").Preload("Property").Find(&results)
+	tx := repo.db.Preload("User").Preload("Property").Where("user_id = ?", userId).Find(&results)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -98,10 +98,10 @@ func (repo *bookingRepository) GetAll() (data []booking.Core, err error) {
 }
 
 // GetById implements booking.RepositoryInterface
-func (repo *bookingRepository) GetById(id int) (data booking.Core, err error) {
+func (repo *bookingRepository) GetById(id int, userId int) (data booking.Core, err error) {
 	var result Booking
 
-	tx := repo.db.Preload("User").Preload("Property").First(&result, id)
+	tx := repo.db.Preload("User").Preload("Property").Where("user_id = ?", userId).First(&result, id)
 
 	if tx.Error != nil {
 		return data, tx.Error

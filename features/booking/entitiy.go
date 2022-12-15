@@ -32,13 +32,13 @@ type Property struct {
 	PricePerNight float64
 }
 type ServiceInterface interface {
-	GetAll() (data []Core, err error)
+	GetAll(userId int) (data []Core, err error)
 	Create(input Core, c echo.Context) error
-	GetById(id int) (data Core, err error)
+	GetById(id int, userId int) (data Core, err error)
 }
 
 type RepositoryInterface interface {
-	GetAll() (data []Core, err error)
+	GetAll(userId int) (data []Core, err error)
 	Create(input Core) error
-	GetById(id int) (data Core, err error)
+	GetById(id int, userId int) (data Core, err error)
 }

@@ -4,6 +4,7 @@ import (
 	"api-airbnb-alta/features/booking"
 	"api-airbnb-alta/middlewares"
 	"api-airbnb-alta/utils/helper"
+	"errors"
 	"net/http"
 	"strconv"
 	"strings"
@@ -26,7 +27,12 @@ func New(service booking.ServiceInterface, e *echo.Echo) {
 }
 
 func (delivery *BookingDelivery) GetAll(c echo.Context) error {
-	results, err := delivery.bookingService.GetAll()
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, errors.New("Failed load user id from JWT token, please check again."))
+	}
+
+	results, err := delivery.bookingService.GetAll(userId)
 	if err != nil {
 		if strings.Contains(err.Error(), "Get data success. No data.") {
 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
@@ -45,7 +51,12 @@ func (delivery *BookingDelivery) GetById(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
-	results, err := delivery.bookingService.GetById(id)
+
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, errors.New("Failed load user id from JWT token, please check again."))
+	}
+	results, err := delivery.bookingService.GetById(id, userId)
 	if err != nil {
 		if strings.Contains(err.Error(), "Get data success. No data.") {
 			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))

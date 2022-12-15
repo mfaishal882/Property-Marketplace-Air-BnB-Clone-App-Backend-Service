@@ -38,8 +38,8 @@ func (service *bookingService) Create(input booking.Core, c echo.Context) error 
 }
 
 // GetAll implements booking.ServiceInterface
-func (service *bookingService) GetAll() (data []booking.Core, err error) {
-	data, err = service.bookingRepository.GetAll()
+func (service *bookingService) GetAll(userId int) (data []booking.Core, err error) {
+	data, err = service.bookingRepository.GetAll(userId)
 
 	if err != nil {
 		helper.LogDebug(err)
@@ -50,12 +50,13 @@ func (service *bookingService) GetAll() (data []booking.Core, err error) {
 		helper.LogDebug("Get data success. No data.")
 		return nil, errors.New("Get data success. No data.")
 	}
+
 	return data, nil
 }
 
 // GetById implements booking.ServiceInterface
-func (service *bookingService) GetById(id int) (data booking.Core, err error) {
-	data, err = service.bookingRepository.GetById(id)
+func (service *bookingService) GetById(id int, userId int) (data booking.Core, err error) {
+	data, err = service.bookingRepository.GetById(id, userId)
 	if err != nil {
 		log.Error(err.Error())
 		return data, helper.ServiceErrorMsg(err)

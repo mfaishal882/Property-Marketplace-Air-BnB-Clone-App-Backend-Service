@@ -119,7 +119,7 @@ func (repo *bookingRepository) GetById(id int, userId int) (data booking.Core, e
 
 func (repo *bookingRepository) GetAvailability(propertyId uint, checkinDate time.Time, checkoutData time.Time) (result string, err error) {
 	var properties []Property
-	queryBuilder := fmt.Sprintf("SELECT * FROM bookings WHERE property_id = %d AND '%s' BETWEEN checkin_date AND checkout_date OR '%s' BETWEEN checkin_date AND checkout_date;", propertyId, checkinDate, checkoutData)
+	queryBuilder := fmt.Sprintf("SELECT * FROM bookings WHERE property_id = %d AND (('%s' BETWEEN checkin_date AND checkout_date) OR ('%s' BETWEEN checkin_date AND checkout_date));", propertyId, checkinDate, checkoutData)
 
 	fmt.Println("\n\n query ", queryBuilder)
 

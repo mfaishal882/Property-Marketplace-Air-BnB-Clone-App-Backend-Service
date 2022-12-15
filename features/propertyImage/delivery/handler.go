@@ -77,6 +77,9 @@ func (delivery *PropertyImageDelivery) Create(c echo.Context) error {
 	dataCore := toCore(userInput)
 	err := delivery.propertyImageService.Create(dataCore, c)
 	if err != nil {
+		if strings.Contains(err.Error(), "Error:Field validation") {
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))
+		}
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed insert data. "+err.Error()))
 	}
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Success create data"))
@@ -120,6 +123,9 @@ func (delivery *PropertyImageDelivery) Update(c echo.Context) error {
 	dataCore := toCore(userInput)
 	err := delivery.propertyImageService.Update(dataCore, id, c)
 	if err != nil {
+		if strings.Contains(err.Error(), "Error:Field validation") {
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))
+		}
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data. "+err.Error()))
 	}
 

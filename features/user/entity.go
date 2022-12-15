@@ -8,10 +8,10 @@ import (
 
 type Core struct {
 	ID              uint
-	FullName        string `validate:"required"`
-	Email           string `validate:"required,email"`
-	Password        string `validate:"required"`
-	Phone           string `validate:"required"`
+	FullName        string `valiidate:"required"`
+	Email           string `valiidate:"required,email"`
+	Password        string `valiidate:"required"`
+	Phone           string `valiidate:"required"`
 	Gender          string
 	ProfileImageUrl string
 	IsHosting       string

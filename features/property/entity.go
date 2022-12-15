@@ -14,9 +14,9 @@ type Core struct {
 	Description       string
 	Address           string `valiidate:"required"`
 	City              string `valiidate:"required"`
-	ContactNumber     string
-	Facilities        string
-	PropertyType      string
+	ContactNumber     string `valiidate:"required"`
+	Facilities        string `valiidate:"required"`
+	PropertyType      string `valiidate:"required"`
 	RatingAverage     float64
 	ImageThumbnailUrl string
 	UserID            uint
@@ -49,7 +49,7 @@ type ServiceInterface interface {
 	GetAll(queryName, queryCity, queryPropertyType string) (data []Core, err error)
 	Create(input Core, c echo.Context) error
 	GetById(id int) (data Core, err error)
-	Update(input Core, id int) error
+	Update(input Core, id int, c echo.Context) error
 	Delete(id int) error
 	GetPropertyImages(id int) (data []PropertyImage, err error)
 	GetPropertyComments(id int) (data []Comment, err error)

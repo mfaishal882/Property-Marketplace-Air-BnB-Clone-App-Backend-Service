@@ -8,9 +8,9 @@ import (
 
 type Core struct {
 	ID         uint
-	Title      string
-	ImageUrl   string `valiidate:"required"`
-	PropertyID uint   `valiidate:"required"`
+	Title      string `validate:"required"`
+	ImageUrl   string
+	PropertyID uint `validate:"required"`
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

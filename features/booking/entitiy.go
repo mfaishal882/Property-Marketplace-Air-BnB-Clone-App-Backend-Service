@@ -8,13 +8,13 @@ import (
 
 type Core struct {
 	ID            uint
-	CheckinDate   time.Time
-	CheckoutDate  time.Time
+	CheckinDate   time.Time `validate:"required"`
+	CheckoutDate  time.Time `validate:"required"`
 	PricePerNight float64
 	GrossAmount   float64
 	BookingStatus string
 	UserID        uint
-	PropertyID    uint
+	PropertyID    uint `validate:"required"`
 	User          User
 	Property      Property
 	CreatedAt     time.Time
@@ -42,4 +42,5 @@ type RepositoryInterface interface {
 	Create(input Core) error
 	GetById(id int, userId int) (data Core, err error)
 	GetAvailability(propertyId uint, checkinDate time.Time, checkoutData time.Time) (result string, err error)
+	GetPropertyById(id int) (affectedRow int, err error)
 }

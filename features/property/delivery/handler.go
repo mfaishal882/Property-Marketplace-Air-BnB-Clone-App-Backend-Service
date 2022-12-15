@@ -87,9 +87,12 @@ func (delivery *PropertyDelivery) Create(c echo.Context) error {
 	}
 
 	dataCore := toCore(propertyInput)
-	helper.LogDebug("\n dataCore = ", dataCore)
+	// helper.LogDebug("\n dataCore = ", dataCore)
 	err := delivery.propertyService.Create(dataCore, c)
 	if err != nil {
+		if strings.Contains(err.Error(), "Error:Field validation") {
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))
+		}
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed insert data. "+err.Error()))
 	}
 	return c.JSON(http.StatusCreated, helper.SuccessResponse("Success create data"))
@@ -118,16 +121,19 @@ func (delivery *PropertyDelivery) Update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
 	}
 
-	fmt.Println("\n\nProp data = ", propertyData)
-	fmt.Println("\n\nid = ", userId, " = prop user id =", propertyData.UserID)
+	// fmt.Println("\n\nProp data = ", propertyData)
+	// fmt.Println("\n\nid = ", userId, " = prop user id =", propertyData.UserID)
 
 	if userId != int(propertyData.UserID) {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
 	}
 
 	dataCore := toCore(propertyInput)
-	err := delivery.propertyService.Update(dataCore, id)
+	err := delivery.propertyService.Update(dataCore, id, c)
 	if err != nil {
+		if strings.Contains(err.Error(), "Error:Field validation") {
+			return c.JSON(http.StatusBadRequest, helper.FailedResponse("Some field cannot Empty. Details : "+err.Error()))
+		}
 		return c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed update data. "+err.Error()))
 	}
 

@@ -138,3 +138,20 @@ func (repo *bookingRepository) GetAvailability(propertyId uint, checkinDate time
 
 	return "Not Available", nil
 }
+
+// GetById implements property.RepositoryInterface
+func (repo *bookingRepository) GetPropertyById(id int) (affectedRow int, err error) {
+	var property Property
+
+	tx := repo.db.First(&property, id)
+
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return 0, tx.Error
+	}
+
+	return int(tx.RowsAffected), nil
+}

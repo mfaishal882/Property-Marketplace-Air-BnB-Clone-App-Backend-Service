@@ -5,6 +5,8 @@ import (
 	"api-airbnb-alta/middlewares"
 	"api-airbnb-alta/utils/helper"
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -28,6 +30,20 @@ func (service *bookingService) Create(input booking.Core, c echo.Context) error 
 	// validasi input
 	if errValidate := service.validate.Struct(input); errValidate != nil {
 		return errValidate
+	}
+
+	// checkc id property exist
+	propertyRecord, errGetProp := service.bookingRepository.GetPropertyById(int(input.PropertyID))
+	if errGetProp != nil {
+		fmt.Println("Error : " + errGetProp.Error())
+		if strings.Contains(errGetProp.Error(), "not found") {
+			return errors.New("Failed Property not exist, please check your input.")
+		}
+		return errors.New("Failed get property data. ")
+	}
+
+	if propertyRecord == 0 {
+		return errors.New("Property not exist, please check your input.")
 	}
 
 	id := middlewares.ExtractTokenUserId(c)

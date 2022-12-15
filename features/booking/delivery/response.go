@@ -14,6 +14,7 @@ type DataResponse struct {
 	BookingStatus string    `json:"booking_status" form:"booking_status"`
 	UserName      string    `json:"user_name" form:"user_name"`
 	PropertyName  string    `json:"property_name" form:"property_name"`
+	PropertyID    uint      `json:"property_id" form:"property_id"`
 	CreatedAt     time.Time `json:"created_at" form:"created_at"`
 }
 
@@ -27,6 +28,7 @@ func fromCore(dataCore booking.Core) DataResponse {
 		BookingStatus: dataCore.BookingStatus,
 		UserName:      dataCore.User.FullName,
 		PropertyName:  dataCore.Property.PropertyName,
+		PropertyID:    dataCore.PropertyID,
 		CreatedAt:     dataCore.CreatedAt,
 	}
 }

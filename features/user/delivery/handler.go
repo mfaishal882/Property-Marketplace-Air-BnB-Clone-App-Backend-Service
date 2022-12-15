@@ -144,6 +144,18 @@ func (delivery *UserDelivery) GetProperties(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
+
+	// validasi data di proses oleh user ybs
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+
+	if userId != id {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
+	// process
 	results, err := delivery.userService.GetProperties(id)
 	if err != nil {
 		if strings.Contains(err.Error(), "Get data success. No data.") {

@@ -45,7 +45,7 @@ func (delivery *PropertyImageDelivery) GetAll(c echo.Context) error {
 
 	dataResponse := fromCoreList(results)
 
-	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all users", dataResponse))
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all data.", dataResponse))
 }
 
 func (delivery *PropertyImageDelivery) GetById(c echo.Context) error {

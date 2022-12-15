@@ -41,7 +41,7 @@ func (service *propertyService) Create(input property.Core, c echo.Context) erro
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c)
 		if err != nil {
-			return errors.New("registration failed. cannot upload data")
+			return errors.New("Failed. Cannot upload data")
 		}
 		log.Print(res)
 		input.ImageThumbnailUrl = res
@@ -118,7 +118,7 @@ func (service *propertyService) Update(input property.Core, id int, c echo.Conte
 	if file != nil {
 		res, err := thirdparty.UploadProfile(c)
 		if err != nil {
-			return errors.New("registration failed. cannot upload data")
+			return errors.New("Failed. Cannot upload data")
 		}
 		log.Print(res)
 		input.ImageThumbnailUrl = res

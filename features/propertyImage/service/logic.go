@@ -36,7 +36,7 @@ func (service *propertyImageService) Create(input propertyImage.Core, c echo.Con
 		res, err := thirdparty.Upload(c)
 		if err != nil {
 			helper.LogDebug("Failed Upload : ", res, " Error ", err)
-			return errors.New("Registration Failed. Cannot Upload Data.")
+			return errors.New("Failed. Cannot Upload Data.")
 		}
 		helper.LogDebug("Success Upload : ", res)
 		input.ImageUrl = res
@@ -108,7 +108,7 @@ func (service *propertyImageService) Update(input propertyImage.Core, id int, c 
 		res, err := thirdparty.Upload(c)
 		if err != nil {
 			helper.LogDebug("Failed Upload : ", res, " Error ", err)
-			return errors.New("Registration Failed. Cannot Upload Data.")
+			return errors.New("Failed. Cannot Upload Data.")
 		}
 		helper.LogDebug("Success Upload : ", res)
 		input.ImageUrl = res

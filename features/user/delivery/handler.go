@@ -4,6 +4,7 @@ import (
 	"api-airbnb-alta/features/user"
 	"api-airbnb-alta/middlewares"
 	"api-airbnb-alta/utils/helper"
+	"errors"
 	"net/http"
 	"strconv"
 	"strings"
@@ -21,6 +22,7 @@ func New(service user.ServiceInterface, e *echo.Echo) {
 	}
 
 	e.GET("/users", handler.GetAll, middlewares.JWTMiddleware())
+	e.GET("/users/me", handler.GetMe, middlewares.JWTMiddleware())
 	e.GET("/users/:id", handler.GetById, middlewares.JWTMiddleware())
 	e.POST("/users", handler.Create)
 	e.PUT("/users/:id", handler.Update, middlewares.JWTMiddleware(), middlewares.UserOnlySameId)
@@ -46,6 +48,24 @@ func (delivery *UserDelivery) GetAll(c echo.Context) error {
 	dataResponse := fromCoreList(results)
 
 	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read all users", dataResponse))
+}
+
+func (delivery *UserDelivery) GetMe(c echo.Context) error {
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, errors.New("Failed load user id from JWT token, please check again."))
+	}
+	results, err := delivery.userService.GetById(userId)
+	if err != nil {
+		if strings.Contains(err.Error(), "Get data success. No data.") {
+			return c.JSON(http.StatusOK, helper.SuccessWithDataResponse(err.Error(), results))
+		}
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))
+	}
+
+	dataResponse := fromCore(results)
+
+	return c.JSON(http.StatusOK, helper.SuccessWithDataResponse("Success read user.", dataResponse))
 }
 
 func (delivery *UserDelivery) GetById(c echo.Context) error {
@@ -124,6 +144,18 @@ func (delivery *UserDelivery) GetProperties(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
+
+	// validasi data di proses oleh user ybs
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+
+	if userId != id {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
+	// process
 	results, err := delivery.userService.GetProperties(id)
 	if err != nil {
 		if strings.Contains(err.Error(), "Get data success. No data.") {

@@ -95,7 +95,21 @@ func (delivery *CommentDelivery) Update(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error binding data. "+errBind.Error()))
 	}
 
+	// validasi data di proses oleh user ybs
 	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	commentData, errGet := delivery.commentService.GetById(id)
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	if userId != int(commentData.UserID) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
+	// process
 	dataCore := toCore(userInput, uint(userId))
 	err := delivery.commentService.Update(dataCore, id, c)
 	if err != nil {
@@ -111,6 +125,22 @@ func (delivery *CommentDelivery) Delete(c echo.Context) error {
 	if errConv != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Error. Id must integer."))
 	}
+
+	// validasi data di proses oleh user ybs
+	userId := middlewares.ExtractTokenUserId(c)
+	if userId < 1 {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed load user id from JWT token, please check again."))
+	}
+	commentData, errGet := delivery.commentService.GetById(id)
+	if errGet != nil {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse(errGet.Error()))
+	}
+
+	if userId != int(commentData.UserID) {
+		return c.JSON(http.StatusBadRequest, helper.FailedResponse("Failed process data, data must be yours."))
+	}
+
+	// process
 	err := delivery.commentService.Delete(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, helper.FailedResponse(err.Error()))

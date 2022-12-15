@@ -5,6 +5,7 @@ import (
 	"api-airbnb-alta/middlewares"
 	"api-airbnb-alta/utils/helper"
 	"errors"
+	"fmt"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -26,9 +27,21 @@ func New(repo booking.RepositoryInterface) booking.ServiceInterface {
 // Create implements booking.ServiceInterface
 func (service *bookingService) Create(input booking.Core, c echo.Context) error {
 	id := middlewares.ExtractTokenUserId(c)
-	// userName := middlewares.ExtractTokenUserName(c)
 	input.UserID = uint(id)
-	// input.User.FullName = userName
+
+	availStatus, errAvail := service.bookingRepository.GetAvailability(input.PropertyID, input.CheckinDate, input.CheckoutDate)
+	if errAvail != nil {
+		return errors.New("Failed check checkin checkout availbility.")
+	}
+
+	fmt.Println("\n\nprop id", input.Property.ID)
+	fmt.Println("\n\n checkin", input.CheckinDate)
+	fmt.Println("\n\n checkout", input.CheckoutDate)
+	fmt.Println("\n\navail status", availStatus)
+
+	if availStatus != "Available" {
+		return errors.New("Check In and Check Out date not available. Please pick another one.")
+	}
 
 	errCreate := service.bookingRepository.Create(input)
 	if errCreate != nil {

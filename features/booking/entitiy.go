@@ -41,4 +41,5 @@ type RepositoryInterface interface {
 	GetAll(userId int) (data []Core, err error)
 	Create(input Core) error
 	GetById(id int, userId int) (data Core, err error)
+	GetAvailability(propertyId uint, checkinDate time.Time, checkoutData time.Time) (result string, err error)
 }

@@ -43,8 +43,6 @@ Clean Architechture
 - File Repository Amazon S3 Service
 - Cloudflre HTTPS/SSL
 
-We will be performing the CRUD operation for Book with few fields.
-
 ## Feature
 
 - Auth (Login)

@@ -38,8 +38,13 @@ func (repo *bookingRepository) Create(input booking.Core) error {
 	}
 
 	if tx.RowsAffected == 0 {
+		fmt.Println("Failed Create Data Booking. Row Affected ", tx.RowsAffected)
 		return errors.New("failed create data")
 	}
+
+	fmt.Println("\n\n\ncreate Affected ", tx.RowsAffected)
+
+	fmt.Println("\n\nHasil insert booking ", dataGorm)
 
 	var id int
 	ty := repo.db.Raw("SELECT LAST_INSERT_ID()").Scan(&id)
@@ -47,10 +52,25 @@ func (repo *bookingRepository) Create(input booking.Core) error {
 		return errors.New("failed create data")
 	}
 
+	if ty.RowsAffected == 0 {
+		fmt.Println("Failed select last insert. Row Affected ", ty.RowsAffected)
+		return errors.New("failed create data")
+	}
+
+	fmt.Println("Gross Row Affected ", ty.RowsAffected)
+
 	ta := repo.db.Exec("UPDATE bookings SET gross_amount = (SELECT DATEDIFF(checkout_date, checkin_date) *price_per_night) WHERE id = ?", id)
 	if ta.Error != nil {
 		return errors.New("failed create data")
 	}
+
+	if ta.RowsAffected == 0 {
+		fmt.Println("Failed update gross ammount. Row Affected ", ta.RowsAffected)
+		return errors.New("failed create data")
+	}
+
+	fmt.Println("Gross Row Affected ", ta.RowsAffected)
+
 	return nil
 
 	// var properties Property

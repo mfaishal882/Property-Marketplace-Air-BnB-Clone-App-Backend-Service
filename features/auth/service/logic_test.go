@@ -7,40 +7,40 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestLogin(t *testing.T) {
 	repo := new(mocks.AuthRepository)
-
 	t.Run("Success Login", func(t *testing.T) {
-		inputData := auth.Core{Email: "Budi@gmail.com", Password: "13123123"}
-		returnData := auth.Core{ID: 1, FullName: "Budi", Email: "Budi@gmail.com", Password: "13123123", ProfileImageUrl: ".jpg", Phone: "0899", Gender: "Male", IsHosting: "No"}
-
-		repo.On("FindUser", inputData.Email).Return(returnData, nil).Once()
+		inputData := auth.Core{Email: "sheena@duck.com", Password: "loonatheworld"}
+		returnData := auth.Core{ID: 1, FullName: "Sheena", Email: "sheena@duck.com", Password: "$2a$10$pWC8x2deWxzX6TjovlONTuLwK.S0p1vyf006nfjO98ZpeZ9qdeisK", Phone: "0899", ProfileImageUrl: ".jpg", Gender: "Male", IsHosting: "No"}
+		repo.On("FindUser", mock.Anything).Return(returnData, nil).Once()
 		srv := New(repo)
-		result, token, errLogin := srv.Login(inputData)
+		response, _, err := srv.Login(inputData)
+		assert.Nil(t, err)
+		assert.Equal(t, returnData, response)
+		repo.AssertExpectations(t)
 
-		assert.NoError(t, errLogin, "Error is null")
-		assert.NotEmpty(t, token, "Token generated.")
-		assert.NotEmpty(t, result, "Result data.")
+	})
+
+	t.Run("Failed Login, Wrong Password", func(t *testing.T) {
+		repo.On("FindUser", mock.Anything).Return(auth.Core{}, nil, errors.New("failed to login, password didn't match, please check password again")).Once()
+		srv := New(repo)
+		response, _, err := srv.Login(auth.Core{ID: 1, FullName: "Sheena", Email: "sheena@duck.com", Password: "$2a$10$pWC8x2deWxzX6TjovlONTuLwK.S0p1vyf006nfjO98ZpeZ9qdeisK", Phone: "0899", ProfileImageUrl: ".jpg", Gender: "Male", IsHosting: "No"})
+		assert.NotNil(t, err)
+		assert.Equal(t, response, auth.Core{})
 		repo.AssertExpectations(t)
 	})
 
-	t.Run("Failed Login - Empty Data", func(t *testing.T) {
-		inputData1 := auth.Core{Email: "Budi@gmail.com", Password: ""}
-		inputData2 := auth.Core{Email: "Budi@gmail.com", Password: ""}
-		inputData3 := auth.Core{Email: "", Password: ""}
-		returnData := auth.Core{}
-
-		repo.On("FindUser").Return(returnData, errors.New("Failed process query")).Once()
+	t.Run("Failed Login, There's empty input field", func(t *testing.T) {
+		inputKosong := auth.Core{Email: "sheena@duck.com", Password: "loonatheworld"}
+		repo.On("FindUser", mock.Anything).Return(auth.Core{}, nil, errors.New("failed to login, password didn't match, please check password again")).Once()
 		srv := New(repo)
-		_, _, errLogin1 := srv.Login(inputData1)
-		_, _, errLogin2 := srv.Login(inputData2)
-		_, _, errLogin3 := srv.Login(inputData3)
-
-		assert.Contains(t, errLogin1, "validate input", "Failed login. Empty Email.")
-		assert.Contains(t, errLogin2, "validate input", "Failed login. Empty Password.")
-		assert.Contains(t, errLogin3, "validate input", "Failed login. Empty Email and Password.")
+		_, _, err := srv.Login(inputKosong)
+		assert.NotNil(t, err)
+		assert.EqualError(t, err, "failed to login, password didn't match, please check password again")
 		repo.AssertExpectations(t)
 	})
+
 }

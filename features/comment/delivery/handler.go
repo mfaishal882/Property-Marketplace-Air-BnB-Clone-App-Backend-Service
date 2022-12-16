@@ -20,8 +20,8 @@ func New(service comment.ServiceInterface, e *echo.Echo) {
 		commentService: service,
 	}
 
-	e.GET("/comments", handler.GetAll, middlewares.JWTMiddleware())
-	e.GET("/comments/:id", handler.GetById, middlewares.JWTMiddleware())
+	e.GET("/comments", handler.GetAll)
+	e.GET("/comments/:id", handler.GetById)
 	e.POST("/comments", handler.Create, middlewares.JWTMiddleware())
 	e.PUT("/comments/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/comments/:id", handler.Delete, middlewares.JWTMiddleware())

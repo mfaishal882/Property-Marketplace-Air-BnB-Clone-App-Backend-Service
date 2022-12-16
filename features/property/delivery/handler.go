@@ -23,13 +23,13 @@ func New(service property.ServiceInterface, e *echo.Echo) {
 	}
 
 	e.GET("/properties", handler.GetAll)
-	e.GET("/properties/:id", handler.GetById, middlewares.JWTMiddleware())
+	e.GET("/properties/:id", handler.GetById)
 	e.POST("/properties", handler.Create, middlewares.JWTMiddleware())
 	e.PUT("/properties/:id", handler.Update, middlewares.JWTMiddleware())
 	e.DELETE("/properties/:id", handler.Delete, middlewares.JWTMiddleware())
-	e.GET("/properties/:id/images", handler.GetPropertyImages, middlewares.JWTMiddleware())
-	e.GET("/properties/:id/comments", handler.GetPropertyComments, middlewares.JWTMiddleware())
-	e.GET("/properties/:id/availability", handler.GetAvailability, middlewares.JWTMiddleware())
+	e.GET("/properties/:id/images", handler.GetPropertyImages)
+	e.GET("/properties/:id/comments", handler.GetPropertyComments)
+	e.GET("/properties/:id/availability", handler.GetAvailability)
 
 	//middlewares.IsAdmin = untuk membatasi akses endpoint hanya admin
 	//middlewares.UserOnlySameId = untuk membatasi akses user mengelola data diri sendiri saja

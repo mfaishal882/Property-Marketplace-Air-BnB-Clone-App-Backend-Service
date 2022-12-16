@@ -22,7 +22,7 @@ func New(service property.ServiceInterface, e *echo.Echo) {
 		propertyService: service,
 	}
 
-	e.GET("/properties", handler.GetAll, middlewares.JWTMiddleware())
+	e.GET("/properties", handler.GetAll)
 	e.GET("/properties/:id", handler.GetById, middlewares.JWTMiddleware())
 	e.POST("/properties", handler.Create, middlewares.JWTMiddleware())
 	e.PUT("/properties/:id", handler.Update, middlewares.JWTMiddleware())

@@ -7,14 +7,19 @@
 A year after pandemic is over, want go on vacation? Reserve homestay for your vacation using [Property Marketplace App](https://feproject3kel3-7j4c7hclm-airbbnb.vercel.app/user/myproperties)! Many place to stay here, just choose, check availbility and book! So simple! That awesome app was powered with this API.
 This project is about the API Program for Property Marketplace using powerful languange, Golang. Build in Docker Container and also using Mysql at Docker Container.  This API will be consumed by Air BnB Alta App that our Frontend team build. Checkout more about this API App below.
 
+## Database Design
+
+Database design using Entity Relationship Diagram.
+
+![ERD API](https://user-images.githubusercontent.com/112921258/214288354-fb647434-9b94-4240-a0d2-1b55d887533b.jpg)
+
 ## Open API Documentation
 
 Explore our API at this [Documentation](https://app.swaggerhub.com/apis-docs/ACHMADQIZWINI4_1/GP3_Kelompok3/1.0.0) powered by [Swagger.io](https://swagger.io/).
 
-## Database Design
+## Postman Collection API
 
-Database design using Entity Relationship Diagram.
-![ERD](https://raw.githubusercontent.com/Fase2-Project3-Group3/api-airbnb-alta/main/erd_api.jpg)
+Test the API using with Postman Collection ath this [Property-Marketplace-AirBnBCloneApp.postman_collection v6.zip](https://github.com/Property-Marketplace-Air-BnB-Clone-App/Property-Marketplace-Air-BnB-Clone-App-Backend-Service/files/10489410/Property-Marketplace-AirBnBCloneApp.postman_collection.v6.zip)
 
 ## Tech Stack
 

@@ -1,11 +1,11 @@
-# API Air BnB Alta
+# Backend Service API Property Marketplace (Air BnB Clone App)
 
-![AirBNB Alta](https://trialtestbucket.s3.amazonaws.com/profile/rAzuOVHDUfpVTw5UBPj1-sultan%20thumbnail.jpeg)
+![air-bnb-clone-app-logo](https://user-images.githubusercontent.com/112921258/214287286-83b65329-4b2d-4000-a9ba-02917dcc5078.png)
 
-## What is API Air Bnb Alta?
+## What is Property Marketplace?
 
-A year after pandemic is over, want go on vacation? Reserve homestay for your vacation using [Air BnB Alta App](https://feproject3kel3-7j4c7hclm-airbbnb.vercel.app/user/myproperties)! Many place to stay here, just choose, check availbility and book! So simple! That awesome app was powered with this API.
-This project is about the API Program for Air BnB Alta using powerful languange, Golang. Build in Docker Container and also using Mysql at Docker Container. This project as part of the requirements to pass Phase 2 of the [Alterra Academy’s](https://academy.alterra.id/) Immersive Program. This API will be consumed by Air BnB Alta App that our Frontend team build. Checkout more about this API App below.
+A year after pandemic is over, want go on vacation? Reserve homestay for your vacation using [Property Marketplace App](https://feproject3kel3-7j4c7hclm-airbbnb.vercel.app/user/myproperties)! Many place to stay here, just choose, check availbility and book! So simple! That awesome app was powered with this API.
+This project is about the API Program for Property Marketplace using powerful languange, Golang. Build in Docker Container and also using Mysql at Docker Container.  This API will be consumed by Air BnB Alta App that our Frontend team build. Checkout more about this API App below.
 
 ## Open API Documentation
 
